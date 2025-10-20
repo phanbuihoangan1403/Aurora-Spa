@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Điểm Tích Lũy - Aurora Spa</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background-color: #f8f5ef;
+      color: #2d2d2d;
+    }
+
+    /* Thanh công cụ trên cùng */
+    header {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 18px 60px;
+      border-bottom: 1px solid #e4dfd4;
+      background-color: #fffdf9;
+      position: relative;
+    }
+
+    header .logo {
+      position: absolute;
+      left: 40px;
+    }
+
+    header .logo img {
+      height: 55px;
+    }
+
+    header nav {
+      margin-left: auto;
+      margin-right: 220px;
+      transform: skewX(-10deg);
+      text-align: right;
+    }
+
+    header nav a {
+      text-decoration: none;
+      color: #3d493b;
+      margin: 0 12px;
+      font-size: 15px;
+      transition: 0.3s;
+      display: inline-block;
+      transform: skewX(10deg);
+    }
+
+    header nav a:hover {
+      color: #9a8856;
+    }
+
+    header .user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #fff;
+      color: #3d493b;
+      padding: 6px 16px;
+      border-radius: 50px;
+      border: 1px solid #9a8856;
+      font-size: 14px;
+    }
+
+    header .user img {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Thông tin khách hàng */
+    .user-info {
+      border: 1px solid #d9c79b;
+      border-radius: 10px;
+      padding: 24px 40px;
+      margin: 50px auto 30px;
+      max-width: 900px;
+      background: #fffdf9;
+      box-shadow: 0 0 10px rgba(0,0,0,0.03);
+    }
+
+    .user-info h2 {
+      text-align: center;
+      color: #2d2d2d;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      row-gap: 10px;
+      column-gap: 30px;
+      font-size: 16px;
+    }
+
+    .info-grid div span {
+      color: #7a714b;
+      font-weight: 500;
+    }
+
+    .points {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+      color: #3a3a3a;
+    }
+
+    .points strong {
+      color: #9a8856;
+      font-size: 22px;
+    }
+
+    /* Bảng lịch sử tích điểm */
+    .history {
+      max-width: 900px;
+      margin: 0 auto 80px;
+      background: #fffdf9;
+      border: 1px solid #d9c79b;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    thead {
+      background-color: #f6f2e9;
+      color: #7a714b;
+      border-bottom: 1px solid #d9c79b;
+    }
+
+    thead th {
+      padding: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tbody td {
+      padding: 12px;
+      border-top: 1px solid #eee6d8;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #fcfaf6;
+    }
+
+    .plus { color: #3a7a3c; font-weight: 600; }
+    .minus { color: #b2422e; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Aurora_logo_example.png" alt="Aurora Spa"></div>
+    <nav>
+      <a href="#">Trang chủ</a>
+      <a href="#">Dịch vụ</a>
+      <a href="#">Blog</a>
+      <a href="#">Lịch hẹn</a>
+      <a href="#">FAQ</a>
+      <a href="#">Liên hệ</a>
+    </nav>
+    <div class="user">
+      <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="user icon">
+      <strong>NGUYỄN PHÚC THẮM</strong>
+    </div>
+  </header>
+
+  <section class="user-info">
+    <h2>THÔNG TIN KHÁCH HÀNG</h2>
+    <div class="info-grid">
+      <div><span>Họ tên:</span> Nguyễn Phúc Thắm</div>
+      <div><span>Số điện thoại:</span> 0905 123 456</div>
+      <div><span>Email:</span> tham.nguyen@example.com</div>
+      <div><span>Ngày tham gia:</span> 20/06/2023</div>
+    </div>
+    <div class="points">
+      Điểm tích lũy hiện tại: <strong>125 điểm</strong>
+    </div>
+  </section>
+
+  <section class="history">
+    <table>
+      <thead>
+        <tr>
+          <th>Ngày</th>
+          <th>Hoạt động</th>
+          <th>Điểm thay đổi</th>
+          <th>Điểm còn lại</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>24/09/2025</td>
+          <td>Hoàn thành đơn hàng #HD2031</td>
+          <td class="plus">+20</td>
+          <td>125</td>
+        </tr>
+        <tr>
+          <td>15/09/2025</td>
+          <td>Quy đổi điểm sang phiếu giảm 50K</td>
+          <td class="minus">-50</td>
+          <td>105</td>
+        </tr>
+        <tr>
+          <td>05/09/2025</td>
+          <td>Tham gia chương trình “Giới thiệu bạn bè”</td>
+          <td class="plus">+30</td>
+          <td>155</td>
+        </tr>
+        <tr>
+          <td>01/09/2025</td>
+          <td>Hoàn thành đơn hàng #HD1952</td>
+          <td class="plus">+10</td>
+          <td>125</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</body>
+</html>
