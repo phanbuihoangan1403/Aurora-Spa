@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Spa - Bí Quyết Làm Đẹp & Chăm Sóc Sức Khỏe</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f1e6;
+        }
+
+        /* HEADER */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+        }
+
+        .menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #444;
+            font-weight: 500;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 1px solid #aaa;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-login {
+            background: white;
+        }
+
+        .btn-register {
+            background: #b5a45b;
+            color: white;
+            border: none;
+        }
+
+        /* BLOG BANNER */
+        .banner {
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .banner img {
+            width: 14.2%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        /* TITLE */
+        .title-box {
+            padding: 30px 60px;
+        }
+
+        .title-big {
+            font-size: 48px;
+            color: #2e5e42;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #6b6b6b;
+            margin-top: -5px;
+        }
+
+        /* FEATURED BLOG */
+        .featured {
+            padding: 20px 60px;
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .featured-img img {
+            width: 280px;
+            border-radius: 10px;
+        }
+
+        .featured-content {
+            max-width: 600px;
+        }
+
+        .featured-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2e5e42;
+        }
+
+        .featured-desc {
+            margin: 10px 0;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .btn-more {
+            padding: 8px 16px;
+            background: #2e5e42;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="navbar">
+    <div class="logo">AURORA SPA</div>
+    <ul class="menu">
+        <li><a href="#">Trang chủ</a></li>
+        <li><a href="#">Dịch vụ</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Lịch hẹn</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Liên hệ</a></li>
+    </ul>
+    <div class="buttons">
+        <button class="btn btn-login">ĐĂNG NHẬP</button>
+        <button class="btn btn-register">ĐĂNG KÝ</button>
+    </div>
+</div>
+
+<!-- BANNER -->
+<div class="banner">
+    <img src="images/blog1.jpg">
+    <img src="images/blog2.jpg">
+    <img src="images/blog3.jpg">
+    <img src="images/blog4.jpg">
+    <img src="images/blog5.jpg">
+    <img src="images/blog6.jpg">
+    <img src="images/blog7.jpg">
+</div>
+
+<!-- TITLE -->
+<div class="title-box">
+    <div class="title-big">BLOG SPA</div>
+    <div class="subtitle">– BÍ QUYẾT LÀM ĐẸP & CHĂM SÓC SỨC KHỎE</div>
+</div>
+
+<!-- FEATURED BLOG -->
+<div class="featured">
+    <div class="featured-img">
+        <img src="images/featured.jpg" alt="">
+    </div>
+    <div class="featured-content">
+        <div class="featured-title">Nghệ Thuật Massage – Bí Quyết Thư Giãn & Hồi Phục Cơ Thể</div>
+        <div class="featured-desc">
+            Trong cuộc sống bận rộn, đôi khi tâm trí và cơ thể chúng ta thường xuyên chịu áp lực từ công việc, học tập và môi trường. Massage tại Spa chính là “liều thuốc” tuyệt vời giúp giải tỏa căng thẳng.
+        </div>
+        <button class="btn-more">XEM THÊM</button>
+    </div>
+</div>
+
+</body>
+</html>
