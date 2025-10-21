@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurora Spa - Danh sách lịch hẹn</title>
+<style>
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ===== LAYOUT ===== */
+body {
+  display: flex;
+  height: 100vh;
+  background-color: #f6f7f6;
+  color: #222;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 220px;
+  background-color: #2e4d40;
+  color: white;
+  padding: 20px 10px;
+}
+.sidebar h2 {
+  font-size: 20px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+.sidebar ul {
+  list-style: none;
+}
+.sidebar li {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  margin: 5px 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.sidebar li:hover,
+.sidebar li.active {
+  background-color: #4b705a;
+}
+.sidebar li span {
+  margin-left: 10px;
+}
+
+/* ===== MAIN ===== */
+.main {
+  flex: 1;
+  padding: 30px;
+}
+.main h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+/* ===== FILTER BAR ===== */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.filter-bar input, .filter-bar select, .filter-bar button {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+}
+.add-btn {
+  background-color: #2e4d40;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.add-btn:hover {
+  background-color: #446b59;
+}
+
+/* ===== TABLE ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+}
+th {
+  background-color: #f1f1f1;
+}
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.actions button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 5px;
+}
+
+/* ===== MODAL ===== */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.modal-content {
+  background-color: #dbe7e3;
+  padding: 25px 30px;
+  border-radius: 10px;
+  min-width: 500px;
+}
+.modal h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #888;
+  padding-bottom: 10px;
+}
+.modal label {
+  font-weight: 600;
+  display: block;
+  margin-top: 10px;
+}
+.modal input, .modal select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+.modal .buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+.modal .buttons button {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  background-color: #2e4d40;
+  cursor: pointer;
+}
+.modal .buttons button.cancel {
+  background-color: #888;
+}
+.modal .buttons button:hover {
+  opacity: 0.9;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <h2>Aurora Spa</h2>
+  <ul>
+    <li><span>Khách hàng</span></li>
+    <li><span>Dịch vụ</span></li>
+    <li><span>Blog</span></li>
+    <li class="active"><span>Lịch hẹn</span></li>
+    <li><span>Ưu đãi</span></li>
+    <li><span>FAQ</span></li>
+    <li><span>Cài đặt</span></li>
+  </ul>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+  <h1>DANH SÁCH LỊCH HẸN</h1>
+
+  <div class="filter-bar">
+    <button class="add-btn" onclick="openModal('addModal')">+ Thêm lịch hẹn mới</button>
+    <input type="date">
+    <select><option>Trạng thái</option></select>
+    <select><option>Dịch vụ</option></select>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>ID</th>
+        <th>Ngày</th>
+        <th>Giờ</th>
+        <th>Trạng thái</th>
+        <th>Khách hàng</th>
+        <th>Dịch vụ</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td>#LH0001</td>
+        <td>23/09/2022</td>
+        <td>19h</td>
+        <td>Đã đặt</td>
+        <td>Nguyễn Văn A</td>
+        <td>Chăm sóc mặt toàn diện</td>
+        <td class="actions">
+	  <button onclick="openModal('detailModal')">👁️</button>
+          <button onclick="openModal('editModal')">✏️</button>
+          <button onclick="openModal('deleteModal')">🗑️</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============ MODALS ============ -->
+<!-- Chi tiết -->
+<div id="detailModal" class="modal">
+  <div class="modal-content">
+    <h2>Chi tiết lịch hẹn</h2>
+    <p><b>Dịch vụ:</b> Chăm sóc da - Cấp ẩm chuyên sâu</p>
+    <p><b>Thời gian:</b> 19h - 20h10p, Ngày 24/09/2025</p>
+    <p><b>Trạng thái:</b> Đã đặt</p>
+    <p><b>Khách hàng:</b><br>
+    Họ và tên: Nguyễn Văn A<br>
+    Email: nguyenvana@gmail.com<br>
+    SĐT: 0947275783</p>
+    <div class="buttons">
+      <button class="cancel" onclick="closeModal('detailModal')">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<!-- Thêm -->
+<div id="addModal" class="modal">
+  <div class="modal-content">
+    <h2>Thêm lịch hẹn</h2>
+    <label>Họ và tên *</label>
+    <input placeholder="Hoàng Thị Mỹ Ngọc">
+    <label>Email *</label>
+    <input placeholder="hoangthimyngoc@gmail.com">
+    <label>Số điện thoại *</label>
+    <input placeholder="0328278336">
+    <label>Danh mục dịch vụ *</label>
+    <input placeholder="Chăm sóc da">
+    <label>Dịch vụ *</label>
+    <input placeholder="Cấp ẩm chuyên sâu">
+    <label>Ngày đặt *</label>
+    <input type="date">
+    <label>Khung giờ *</label>
+    <input placeholder="19h">
+    <label>Mã giảm giá</label>
+    <input placeholder="aurora123456">
+    <div class="buttons">
+      <button>Thêm</button>
+      <button class="cancel" onclick="closeModal('addModal')">Hủy</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sửa -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <h2>Chỉnh sửa lịch hẹn</h2>
+    <label>Họ và tên *</label>
+    <input value="Nguyễn Phúc Thắm">
+    <label>Email *</label>
+    <input value="nguyenphuctham25@gmail.com">
+    <label>Số điện thoại *</label>
+    <input value="0947275783">
+    <label>Danh mục dịch vụ *</label>
+    <input value="Chăm sóc da">
+    <label>Dịch vụ *</label>
+    <input value="Cấp ẩm chuyên sâu">
+    <label>Ngày đặt *</label>
+    <input type="date" value="2025-09-24">
+    <label>Khung giờ *</label>
+    <input value="19h">
+    <label>Mã giảm giá</label>
+    <input placeholder="Nhập mã giảm giá">
+    <div class="buttons">
+      <button>Cập nhật</button>
+      <button class="cancel" onclick="closeModal('editModal')">Hủy</button>
+    </div>
+  </div>
+</div>
+
+<!-- Xóa -->
+<div id="deleteModal" class="modal">
+  <div class="modal-content" style="text-align:center">
+    <h2>Xóa lịch hẹn</h2>
+    <p>Bạn có chắc chắn muốn hủy lịch hẹn này không?<br>Hành động này không thể hoàn tác.</p>
+    <div class="buttons">
+      <button>Xác nhận</button>
+      <button class="cancel" onclick="closeModal('deleteModal')">Hủy bỏ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openModal(id){document.getElementById(id).style.display='flex'}
+function closeModal(id){document.getElementById(id).style.display='none'}
+</script>
+</body>
+</html>
