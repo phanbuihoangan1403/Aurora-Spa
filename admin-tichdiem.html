@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aurora Spa - Danh sách tích điểm khách hàng</title>
+    <style>
+  /* ===== RESET + THEME ===== */
+  *{box-sizing:border-box;font-family:"Segoe UI",sans-serif;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{display:flex;background:#f6f7f6;color:#222;}
+
+  :root{
+    --green:#2e4d40;
+    --green-700:#4b705a;
+    --panel:#fff;
+    --border:#e0e0e0;
+  }
+
+  /* ===== SIDEBAR (căn trái y như lịch hẹn) ===== */
+  .sidebar{
+    width:220px;
+    background:var(--green);
+    color:#fff;
+    padding:20px 10px;
+  }
+  .sidebar h2{
+    text-align:center;
+    font-size:20px;
+    margin-bottom:30px;
+  }
+  .sidebar ul{list-style:none;}
+  .sidebar li{
+    display:flex;
+    align-items:center;
+    padding:10px 15px;
+    margin:5px 0;
+    border-radius:8px;
+    cursor:pointer;
+  }
+  .sidebar li:hover,
+  .sidebar li.active{background:var(--green-700);}
+  .sidebar li span{margin-left:10px;}
+
+  /* ===== MAIN ===== */
+  .main{flex:1;padding:30px;}
+
+  /* ===== HEADER (giữ nguyên căn trái như gốc) ===== */
+  .header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+  }
+  .main h1{
+    font-size:36px;
+    font-weight:700;
+    color:#2e4d40;
+    text-align:left;
+  }
+
+  .top-right{display:flex;align-items:center;gap:10px;}
+  .top-btn{
+    background:#fff;border-radius:8px;padding:8px;cursor:pointer;
+    position:relative;display:flex;align-items:center;justify-content:center;
+    width:40px;height:40px;border:1px solid #ccc;
+  }
+  .top-btn:hover{background:#e0e0e0;}
+  .icon-btn{width:24px;height:24px;fill:white;stroke:black;stroke-width:1;}
+  .dot{position:absolute;width:6px;height:6px;background:#ffc107;border-radius:50%;top:5px;right:5px;}
+
+  /* ===== THANH LỌC & TÌM KIẾM ===== */
+  .filter-bar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .filter-left{display:flex;gap:10px;}
+  .add-btn{
+    background:var(--green);
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    padding:10px 14px;
+    cursor:pointer;
+  }
+  .add-btn:hover{background:#446b59;}
+  #searchInput{
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    outline:none;
+    width:220px;
+  }
+
+  /* ===== TABLE (căn giữa nội dung) ===== */
+  table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+    border-radius:10px;
+    overflow:hidden;
+  }
+  th,td{
+    padding:12px 15px;
+    text-align:center;
+    vertical-align:middle;
+  }
+  th{
+    background:#f1f1f1;
+    font-weight:600;
+  }
+  tr:nth-child(even){background:#f9f9f9;}
+  tr:hover{background:#fff8e1;} /* vàng nhạt nhẹ khi hover */
+  .actions button{
+    border:none;
+    background:none;
+    cursor:pointer;
+    font-size:16px;
+    margin:0 5px;
+  }
+
+  /* ===== PAGINATION ===== */
+  .pagination{text-align:center;margin-top:15px;}
+  .pagination button{
+    margin:0 5px;
+    padding:6px 10px;
+    border:1px solid #ccc;
+    background:#fff;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  .pagination button.active{
+    background:var(--green);
+    color:#fff;
+    border:none;
+  }
+
+  /* ===== MODALS (căn giữa nội dung modal) ===== */
+  .modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.4);
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+  }
+  .modal-content{
+    background:#dbe7e3;
+    padding:25px 30px;
+    border-radius:10px;
+    min-width:520px;
+    text-align:center;
+  }
+  .modal h2{
+    text-align:center;
+    margin-bottom:20px;
+    border-bottom:1px solid #888;
+    padding-bottom:10px;
+  }
+  .modal label{
+    display:block;
+    font-weight:600;
+    margin-top:10px;
+    text-align:left;
+  }
+  .modal input{
+    width:100%;
+    padding:8px;
+    border:1px solid #aaa;
+    border-radius:5px;
+    margin-top:5px;
+    text-align:center;
+  }
+  .modal .buttons{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin-top:20px;
+  }
+  .modal .buttons button{
+    padding:8px 20px;
+    border:none;
+    border-radius:5px;
+    color:#fff;
+    background:var(--green);
+    cursor:pointer;
+  }
+  .modal .buttons button.cancel{background:#888;}
+  .modal .buttons button:hover{opacity:.9;}
+
+  /* ===== BẢNG LỊCH SỬ ===== */
+  .history-table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+    border-radius:8px;
+    overflow:hidden;
+    margin-top:10px;
+  }
+  .history-table th,.history-table td{
+    padding:10px 12px;
+    border-bottom:1px solid #eee;
+    text-align:center;
+  }
+  .history-table th{background:#f6f6f6;}
+  .pill{
+    display:inline-block;
+    padding:3px 10px;
+    border-radius:999px;
+    border:1px solid #ddd;
+    font-size:13px;
+    background:#fff;
+  }
+  /* === Thanh thao tác hàng loạt === */
+  .bulk-bar{display:none;align-items:center;gap:10px;margin-bottom:15px;padding:10px;border:1px dashed #ccc;border-radius:8px;background:#fafafa;}
+  .bulk-bar.show{display:flex;}
+  .bulk-bar .pill{padding:8px 12px;border-radius:6px;border:1px solid #ccc;background:#fff;cursor:pointer;}
+  .bulk-bar .pill:hover{background:#ececec;}
+  .bulk-bar .danger{background:#b53d3d;color:#fff;border:none;}
+  .bulk-bar .danger:hover{opacity:0.9;}
+</style>
+
+
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>Aurora Spa</h2>
+    <ul>
+      <li><span>Khách hàng</span></li>
+      <li><span>Dịch vụ</span></li>
+      <li><span>Blog</span></li>
+      <li><span>Lịch hẹn</span></li>
+      <li><span>FAQ</span></li>
+      <li class="active"><span>Tích điểm</span></li>
+      <li><span>Cài đặt</span></li>
+    </ul>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- HEADER với SVG icons giống file lịch hẹn -->
+    <div class="header">
+      <h1>DANH SÁCH TÍCH ĐIỂM KHÁCH HÀNG</h1>
+      <div class="top-right">
+        <button class="top-btn" title="Thông báo">
+          <svg class="icon-btn" viewBox="0 0 24 24">
+            <path d="M6 8a6 6 0 0 1 12 0v5l2 2H4l2-2V8"/>
+            <path d="M9 19a3 3 0 0 0 6 0"/>
+          </svg>
+          <span class="dot"></span>
+        </button>
+        <button class="top-btn" title="Tin nhắn">
+          <svg class="icon-btn" viewBox="0 0 24 24">
+            <path d="M21 15a4 4 0 0 1-4 4H8l-5 4V6a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+          </svg>
+        </button>
+        <button class="top-btn" title="Tài khoản">
+          <svg class="icon-btn" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M20 20a8 8 0 1 0-16 0"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- THANH TÌM KIẾM + NÚT THÊM -->
+    <div class="filter-bar">
+      <div class="filter-left">
+        <button class="add-btn" onclick="openModal('addModal')">+ Thêm khách hàng</button>
+      </div>
+      <input id="searchInput" type="text" placeholder="Tìm theo tên, SĐT, Mã KH" oninput="filterTable()"/>
+    </div>
+
+    <!-- BẢNG CHÍNH -->
+    <table id="pointTable">
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="selectAll"></th>
+          <th>Mã KH</th>
+          <th>Tên khách hàng</th>
+          <th>Điểm hiện tại</th>
+          <th>Số GD điểm</th>
+          <th>Cập nhật gần nhất</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody><!-- render bằng JS --></tbody>
+    </table>
+
+    <!-- PHÂN TRANG 2 TRANG -->
+    <div class="pagination">
+      <button onclick="prevPage()">‹</button>
+      <button id="pageNum" class="active">1</button>
+      <button onclick="nextPage()">›</button>
+    </div>
+  </div>
+
+  <!-- ============ MODALS ============ -->
+  <!-- THÊM KHÁCH HÀNG -->
+  <div id="addModal" class="modal">
+    <div class="modal-content">
+      <h2>Thêm khách hàng</h2>
+      <label>Tên khách hàng *</label>
+      <input id="addName" placeholder="Ví dụ: Nguyễn Văn A"/>
+      <label>Số điện thoại *</label>
+      <input id="addPhone" placeholder="Ví dụ: 0912345678"/>
+      <label>Email</label>
+      <input id="addEmail" placeholder="Ví dụ: a@gmail.com"/>
+      <div class="buttons">
+        <button onclick="addCustomer()">Thêm</button>
+        <button class="cancel" onclick="closeModal('addModal')">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- THANH THAO TÁC HÀNG LOẠT -->
+<div id="bulkBar" class="bulk-bar">
+  <div id="bulkCount">0 mục đã chọn</div>
+  <button class="pill" onclick="openBulkAdjust('plus')">+ Cộng điểm</button>
+  <button class="pill" onclick="openBulkAdjust('minus')">– Trừ điểm</button>
+  <button class="pill danger" onclick="openBulkDelete()">🗑️ Xóa</button>
+</div>
+
+  <!-- CỘNG / TRỪ ĐIỂM -->
+  <div id="adjustModal" class="modal">
+    <div class="modal-content">
+      <h2 id="adjustTitle">Cộng điểm</h2>
+      <label>Số điểm</label>
+      <input id="adjustValue" type="number" />
+      <label>Lý do</label>
+      <input id="adjustReason" placeholder="Ví dụ: Mua hàng / Điều chỉnh"/>
+      <div class="buttons">
+        <button onclick="confirmAdjust()">Xác nhận</button>
+        <button class="cancel" onclick="closeModal('adjustModal')">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- XÓA KHÁCH HÀNG -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content" style="text-align:center">
+      <h2>Xóa khách hàng</h2>
+      <p>Bạn có chắc chắn muốn xóa khách hàng này không?<br/>Hành động này không thể hoàn tác.</p>
+      <div class="buttons">
+        <button onclick="confirmDelete()">Xác nhận</button>
+        <button class="cancel" onclick="closeModal('deleteModal')">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LỊCH SỬ TÍCH ĐIỂM -->
+  <div id="historyModal" class="modal">
+    <div class="modal-content">
+      <h2>Lịch sử tích điểm</h2>
+      <div style="margin-bottom:10px">
+        <span class="pill" id="historyHeader">Mã KH: - • Tên: -</span>
+      </div>
+      <table class="history-table" id="historyTable">
+        <thead>
+          <tr>
+            <th>Ngày</th>
+            <th>Thay đổi điểm</th>
+            <th>Lý do</th>
+            <th style="width:70px;">Xóa</th>
+          </tr>
+        </thead>
+        <tbody><!-- render bằng JS --></tbody>
+      </table>
+      <div class="buttons">
+        <button class="cancel" onclick="closeModal('historyModal')">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  /* ======= HÀM LẤY THỜI GIAN CHÍNH XÁC (CÓ GIỜ:PHÚT:GIÂY) ======= */
+  function getNow() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, "0");
+    const d = String(now.getDate()).padStart(2, "0");
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    const ss = String(now.getSeconds()).padStart(2, "0");
+    return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+  }
+
+  let customers = [
+    {id:"KH001", name:"Nguyễn Văn A", phone:"0905123456", email:"a@gmail.com", points:120, transactions:3, updated:"2025-10-20 15:20:41"},
+    {id:"KH002", name:"Trần Thị B", phone:"0906789123", email:"b@gmail.com", points:90, transactions:2, updated:"2025-10-19 10:10:52"},
+    {id:"KH003", name:"Phạm Quốc C", phone:"0987654321", email:"c@gmail.com", points:300, transactions:6, updated:"2025-10-18 08:42:32"},
+    {id:"KH004", name:"Lê Mỹ D", phone:"0911223344", email:"d@gmail.com", points:150, transactions:4, updated:"2025-10-21 17:05:14"},
+    {id:"KH005", name:"Vũ Thanh E", phone:"0909000999", email:"e@gmail.com", points:60, transactions:1, updated:"2025-10-17 09:31:59"},
+  ];
+
+  let histories = {
+    "KH001":[{date:"2025-10-18 09:00:02", delta:+50, reason:"Mua hàng"}, {date:"2025-10-19 11:00:44", delta:+70, reason:"Ưu đãi 20/10"}],
+    "KH002":[{date:"2025-10-17 14:30:19", delta:+40, reason:"Mua hàng"}, {date:"2025-10-19 09:50:48", delta:+50, reason:"Tích lũy"}],
+    "KH003":[{date:"2025-10-15 13:20:11", delta:+120, reason:"Combo chăm sóc"}, {date:"2025-10-16 16:10:59", delta:+180, reason:"Voucher"}],
+    "KH004":[{date:"2025-10-19 10:30:05", delta:+150, reason:"Mua gói cao cấp"}],
+    "KH005":[{date:"2025-10-16 15:00:33", delta:+60, reason:"Mua hàng"}],
+  };
+
+  let currentPage = 1;
+  const perPage = Math.ceil(customers.length / 2);
+  let selected = new Set();
+  let currentAdjust = {id:null, type:null};
+  let deleteId = null;
+  let currentHistoryId = null;
+
+  /* === Hàm đồng bộ số GD điểm với lịch sử === */
+  function syncTransactions(id=null){
+    if(id){
+      const c = customers.find(x => x.id === id);
+      if(c) c.transactions = (histories[id]||[]).length;
+    }else{
+      for(const c of customers){
+        const list = histories[c.id] || [];
+        c.transactions = list.length;
+      }
+    }
+  }
+
+  function renderTable() {
+    const tbody = document.querySelector("#pointTable tbody");
+    tbody.innerHTML = "";
+    const start = (currentPage - 1) * perPage;
+    const pageData = customers.slice(start, start + perPage);
+
+    pageData.forEach(c => {
+      const tr = document.createElement("tr");
+      tr.dataset.id = c.id;
+      tr.innerHTML = `
+        <td><input type="checkbox" class="rowCheck" data-id="${c.id}" ${selected.has(c.id)?'checked':''}></td>
+        <td>${c.id}</td>
+        <td>${c.name}</td>
+        <td>${c.points}</td>
+        <td>${c.transactions}</td>
+        <td>${c.updated}</td>
+        <td class="actions">
+          <button title="Cộng điểm" onclick="event.stopPropagation(); openAdjust('${c.id}','plus')">➕</button>
+          <button title="Trừ điểm"  onclick="event.stopPropagation(); openAdjust('${c.id}','minus')">➖</button>
+          <button title="Xóa"        onclick="event.stopPropagation(); openDelete('${c.id}')">🗑️</button>
+        </td>`;
+      tr.addEventListener("click", () => openHistory(c.id));
+      tbody.appendChild(tr);
+    });
+    document.getElementById("pageNum").textContent = currentPage;
+    filterTable();
+  }
+
+  function nextPage(){ const max=Math.ceil(customers.length/perPage); if(currentPage<max){currentPage++;renderTable();} }
+  function prevPage(){ if(currentPage>1){currentPage--;renderTable();} }
+
+  function filterTable(){
+    const kw=document.getElementById("searchInput").value.toLowerCase();
+    document.querySelectorAll("#pointTable tbody tr").forEach(row=>{
+      row.style.display=row.innerText.toLowerCase().includes(kw)?"":"none";
+    });
+  }
+
+  function openModal(id){document.getElementById(id).style.display="flex";}
+  function closeModal(id){document.getElementById(id).style.display="none";}
+
+  function addCustomer(){
+    const name=document.getElementById("addName").value.trim();
+    const phone=document.getElementById("addPhone").value.trim();
+    const email=document.getElementById("addEmail").value.trim();
+    if(!name||!phone){alert("Vui lòng nhập tên & SĐT!");return;}
+    if(customers.some(c=>c.phone===phone)){alert("SĐT đã tồn tại!");return;}
+    const id="KH"+String(customers.length+1).padStart(3,"0");
+    const now=getNow();
+    customers.push({id,name,phone,email,points:0,transactions:0,updated:now});
+    histories[id]=[];
+    closeModal("addModal");
+    renderTable();
+  }
+
+  function openAdjust(id,type){
+    currentAdjust={id,type};
+    document.getElementById("adjustTitle").textContent=(type==="plus"?"Cộng":"Trừ")+" điểm";
+    document.getElementById("adjustValue").value="";
+    document.getElementById("adjustReason").value="";
+    openModal("adjustModal");
+  }
+
+  function confirmAdjust(){
+    const val=parseInt(document.getElementById("adjustValue").value)||0;
+    const reason=document.getElementById("adjustReason").value.trim()||"Điều chỉnh";
+    const c=customers.find(x=>x.id===currentAdjust.id);
+    if(!c)return;
+    const delta=currentAdjust.type==="plus"?val:-val;
+    c.points+=delta; if(c.points<0)c.points=0;
+    const now=getNow(); c.updated=now;
+    histories[c.id].push({date:now,delta,reason});
+    syncTransactions(c.id); // 👈 đồng bộ lại số GD điểm
+    closeModal("adjustModal");
+    renderTable();
+  }
+
+  function openDelete(id){deleteId=id;openModal("deleteModal");}
+  function confirmDelete(){
+    customers=customers.filter(c=>c.id!==deleteId);
+    delete histories[deleteId];
+    closeModal("deleteModal");
+    if(currentPage>Math.ceil(customers.length/perPage))currentPage--;
+    renderTable();
+  }
+
+  function openHistory(id){
+    currentHistoryId=id;
+    const c=customers.find(x=>x.id===id);
+    document.getElementById("historyHeader").textContent=`Mã KH: ${c.id} • Tên: ${c.name}`;
+    renderHistoryTable(id);
+    openModal("historyModal");
+  }
+
+  function renderHistoryTable(id){
+    const tbody=document.querySelector("#historyTable tbody");
+    tbody.innerHTML="";
+    (histories[id]||[]).slice().reverse().forEach((h,idx)=>{
+      const tr=document.createElement("tr");
+      const sign=h.delta>=0?"+":"";
+      tr.innerHTML=`
+        <td>${h.date}</td>
+        <td>${sign}${h.delta}</td>
+        <td>${h.reason}</td>
+        <td><button onclick="deleteHistoryRow('${id}',${histories[id].length-1-idx})">🗑️</button></td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function deleteHistoryRow(id,i){
+    histories[id].splice(i,1);
+    const c = customers.find(x => x.id === id);
+    if(c) syncTransactions(id); // 👈 cập nhật lại số GD khi xóa dòng
+    renderHistoryTable(id);
+    renderTable();
+  }
+
+  // --- Khi load lần đầu: đồng bộ toàn bộ ---
+  syncTransactions();
+  renderTable();
+  attachSelectEvents();
+  updateBulkBar();
+
+   function attachSelectEvents(){
+      document.querySelectorAll(".rowCheck").forEach(cb=>{
+        cb.onchange=e=>{
+          const id=e.target.dataset.id;
+          if(e.target.checked) selected.add(id); else selected.delete(id);
+          updateBulkBar();
+        };
+      });
+      const selectAll=document.getElementById("selectAll");
+      if(selectAll){
+        selectAll.onchange=e=>{
+          const all=document.querySelectorAll(".rowCheck");
+          all.forEach(cb=>{
+            cb.checked=e.target.checked;
+            if(e.target.checked) selected.add(cb.dataset.id); else selected.delete(cb.dataset.id);
+          });
+          updateBulkBar();
+        };
+      }
+   }
+</script>
+
+
+
+</body>
+</html>

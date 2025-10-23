@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Spa - Aurora Spa</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f1e6;
+        }
+
+        /* HEADER */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+        }
+
+        /* ✅ ĐÃ THÊM: Logo img thay thế text */
+        .logo img {
+            height: 80px;  /* ✅ Size logo chuẩn */
+            width: auto;   /* ✅ Giữ tỉ lệ */
+        }
+
+        .menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #444;
+            font-weight: 500;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .menu a:hover {
+            color: #2e5e42;
+        }
+
+        /* Hiệu ứng gạch chân khi active */
+        .menu a.active::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #2e5e42;
+            border-radius: 2px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        /* ✅ ĐÃ CHỈNH: Màu button giống hệt các trang khác */
+        .btn-login {
+            background-color: #2e4d40;
+            color: white;
+        }
+
+        .btn-login:hover {
+            background-color: #446b59;
+        }
+
+        .btn-register {
+            background-color: #d1a054;
+            color: white;
+        }
+
+        .btn-register:hover {
+            background-color: #b88439;
+        }
+
+        /* BLOG CONTENT */
+        .container {
+            display: flex;
+            padding: 40px 60px;
+            gap: 60px;
+            align-items: flex-start;
+        }
+
+        .left-images {
+            position: relative;
+            flex: 1;
+        }
+
+        .left-images .main-img {
+            width: 100%;
+            border-radius: 20px;
+        }
+
+        .content {
+            flex: 1.2;
+        }
+
+        .back {
+            font-size: 24px;
+            color: #2e5e42;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: 0.2s;
+        }
+
+        .back:hover {
+            color: #b5a45b;
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2e5e42;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            color: #9c7b2f;
+            font-weight: bold;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+
+        .details {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #444;
+        }
+
+        .details ul {
+            margin-top: 15px;
+            padding-left: 20px;
+        }
+
+        .details li {
+            margin-bottom: 8px;
+        }
+
+        /* CHAT ICON */
+        .chat-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 25px;
+            background-color: #2e5e42;
+            color: white;
+            border-radius: 50%;
+            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="navbar">
+    <!-- ✅ ĐÃ THAY: Logo img thay thế text "AURORA SPA" -->
+    <div class="logo">
+        <img src="blob:https://www.facebook.com/3e7416fb-0cc2-4a86-8f0a-5dd8c26cb64b" alt="Aurora Spa Logo">
+    </div>
+    <ul class="menu">
+        <li><a href="#">Trang chủ</a></li>
+        <li><a href="#">Dịch vụ</a></li>
+        <!-- Gắn class active vào đây -->
+        <li><a href="#" class="active">Blog</a></li>
+        <li><a href="#">Lịch hẹn</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Liên hệ</a></li>
+    </ul>
+    <div class="buttons">
+        <!-- ✅ ĐÃ CHỈNH: Màu button giống hệt các trang khác -->
+        <button class="btn btn-login">ĐĂNG NHẬP</button>
+        <button class="btn btn-register">ĐĂNG KÝ</button>
+    </div>
+</div>
+
+<!-- BLOG CONTENT -->
+<div class="container">
+    <div class="left-images">
+        <img class="main-img" src="https://i.pinimg.com/1200x/22/b0/ce/22b0ce6f14ff6548ec4c7e758acf4a63.jpg" alt="Thảo mộc tự nhiên">
+    </div>
+
+    <div class="content">
+        <div class="back" id="backButton">←</div>
+        <div class="title">BLOG SPA</div>
+        <div class="subtitle">BÍ QUYẾT CHĂM SÓC SỨC KHỎE VÀ SẮC ĐẸP<br>
+            TỪ GỪNG, SẢ VÀ THẢO MỘC TỰ NHIÊN</div>
+        <div class="details">
+            Từ lâu, thiên nhiên đã ban tặng cho chúng ta nhiều nguyên liệu quý giá giúp nâng cao sức khỏe và nuôi dưỡng vẻ đẹp tự nhiên.
+            Những loại thảo mộc quen thuộc như gừng, sả, nghệ, tinh dầu dừa, oải hương không chỉ được dùng trong ẩm thực mà còn mang lại
+            nhiều lợi ích trong chăm sóc cơ thể và tinh thần.
+            <ul>
+                <li><b>Gừng:</b> có tính ấm, hỗ trợ lưu thông máu, tăng sức đề kháng và làm ấm cơ thể.</li>
+                <li><b>Sả:</b> giúp thanh lọc, giải độc, kháng khuẩn tự nhiên và mang lại cảm giác dễ chịu, thư giãn.</li>
+                <li><b>Nghệ:</b> giàu curcumin, làm đẹp da, ngừa viêm và hỗ trợ tiêu hóa.</li>
+                <li><b>Tinh dầu dừa:</b> dưỡng ẩm, chống oxy hóa, giúp tóc khỏe mạnh.</li>
+                <li><b>Oải hương:</b> hương thơm dịu nhẹ, giảm căng thẳng, cải thiện giấc ngủ.</li>
+            </ul>
+            Sử dụng nguyên liệu thiên nhiên trong cuộc sống hằng ngày vừa an toàn, lành tính vừa mang lại sự cân bằng tự nhiên cho cơ thể.
+            Đây chính là xu hướng sống xanh, khỏe mạnh và bền vững mà ngày càng nhiều người lựa chọn.
+        </div>
+    </div>
+</div>
+<!-- SCRIPT -->
+<script>
+    document.getElementById("backButton").addEventListener("click", function() {
+        // Quay về trang danh sách blog
+        window.location.href = "admin blog.html"; // đổi theo tên file trang chính của bạn
+    });
+</script>
+
+</body>
+</html>

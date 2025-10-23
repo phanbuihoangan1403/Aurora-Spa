@@ -1,176 +1,275 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <title>Blog Spa - Bí Quyết Làm Đẹp & Chăm Sóc Sức Khỏe</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f1e6;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog Spa – Bí quyết làm đẹp & chăm sóc sức khỏe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-        /* HEADER */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 60px;
-        }
+  <style>
+    /* ==== RESET ==== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        .menu {
-            display: flex;
-            gap: 30px;
-            list-style: none;
-        }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8f5ef;
+      color: #2d2d2d;
+      line-height: 1.6;
+    }
 
-        .menu a {
-            text-decoration: none;
-            color: #444;
-            font-weight: 500;
-        }
+    /* ==== HEADER ==== */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 80px;
+      background-color: #f8f5ef;
+    }
 
-        .buttons {
-            display: flex;
-            gap: 15px;
-        }
+    .logo img {
+      height: 80px;
+    }
 
-        .btn {
-            padding: 8px 20px;
-            border-radius: 20px;
-            border: 1px solid #aaa;
-            cursor: pointer;
-            font-size: 14px;
-        }
+    nav {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
 
-        .btn-login {
-            background: white;
-        }
+    nav a {
+      text-decoration: none;
+      color: #2d2d2d;
+      font-weight: 500;
+      position: relative;
+    }
 
-        .btn-register {
-            background: #b5a45b;
-            color: white;
-            border: none;
-        }
+    nav a:hover::after,
+    nav a.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 100%;
+      height: 2px;
+      background-color: #2d2d2d;
+    }
 
-        /* BLOG BANNER */
-        .banner {
-            margin-top: 20px;
-            overflow: hidden;
-        }
+    .btns {
+      display: flex;
+      gap: 10px;
+    }
 
-        .banner img {
-            width: 14.2%;
-            height: 220px;
-            object-fit: cover;
-        }
+    .btn {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
 
-        /* TITLE */
-        .title-box {
-            padding: 30px 60px;
-        }
+    /* ✅ ĐÃ CHỈNH: Màu button giống các trang khác */
+    .btn-login {
+      background-color: #2e4d40;
+      color: white;
+    }
 
-        .title-big {
-            font-size: 48px;
-            color: #2e5e42;
-            font-weight: bold;
-        }
+    .btn-login:hover {
+      background-color: #446b59;
+    }
 
-        .subtitle {
-            font-size: 20px;
-            color: #6b6b6b;
-            margin-top: -5px;
-        }
+    .btn-register {
+      background-color: #d1a054;
+      color: white;
+    }
 
-        /* FEATURED BLOG */
-        .featured {
-            padding: 20px 60px;
-            display: flex;
-            gap: 30px;
-            align-items: flex-start;
-        }
+    .btn-register:hover {
+      background-color: #b88439;
+    }
 
-        .featured-img img {
-            width: 280px;
-            border-radius: 10px;
-        }
+    /* ==== HERO IMAGES ==== */
+    .hero-images {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 40px;
+      overflow-x: auto;
+      padding: 0 60px;
+      -webkit-overflow-scrolling: touch;
+    }
 
-        .featured-content {
-            max-width: 600px;
-        }
+    .hero-images img {
+      width: 180px;
+      height: 240px;
+      object-fit: cover;
+      border-radius: 5px;
+      flex-shrink: 0;
+    }
 
-        .featured-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2e5e42;
-        }
+    /* ==== MAIN CONTENT ==== */
+    .content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 60px 60px;
+    }
 
-        .featured-desc {
-            margin: 10px 0;
-            color: #444;
-            line-height: 1.6;
-        }
+    /* ✅ ĐÃ CHỈNH: BLOG SPA TO HƠN RẤT NHIỀU */
+    .content h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 100px;
+      font-weight: 800;
+      color: #2e4d40;
+      margin-bottom: 10px;
+      line-height: 0.9;
+      letter-spacing: -3px;
+    }
 
-        .btn-more {
-            padding: 8px 16px;
-            background: #2e5e42;
-            color: white;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-    </style>
+    .content h2 {
+      font-size: 18px;
+      color: #7b5b3e;
+      margin-bottom: 40px;
+      font-weight: 600;
+    }
+
+    .blog-preview {
+      display: flex;
+      align-items: flex-start;
+      gap: 30px;
+    }
+
+    .blog-preview img {
+      width: 380px;
+      height: 260px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .blog-text {
+      max-width: 600px;
+      margin-top: 10px;
+    }
+
+    .blog-text h3 {
+      color: #2e4d40;
+      font-weight: 700;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .blog-text p {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 15px;
+      line-height: 2.5; /* Adjusted for consistency with massage page */
+    }
+
+    .btn-read {
+      background-color: #2e4d40;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+
+    .btn-read:hover {
+      background-color: #446b59;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: #777;
+    }
+
+    /* ==== RESPONSIVE DESIGN ==== */
+    @media (max-width: 768px) {
+      header {
+        padding: 20px;
+      }
+      .hero-images {
+        padding: 0 20px;
+      }
+      .content {
+        padding: 0 20px 40px;
+      }
+      .content h1 {
+        font-size: 60px;
+      }
+      .blog-preview {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .blog-preview img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="navbar">
-    <div class="logo">AURORA SPA</div>
-    <ul class="menu">
-        <li><a href="#">Trang chủ</a></li>
-        <li><a href="#">Dịch vụ</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Lịch hẹn</a></li>
-        <li><a href="#">FAQ</a></li>
-        <li><a href="#">Liên hệ</a></li>
-    </ul>
-    <div class="buttons">
-        <button class="btn btn-login">ĐĂNG NHẬP</button>
-        <button class="btn btn-register">ĐĂNG KÝ</button>
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <img src="https://scontent.fhan2-4.fna.fbcdn.net/v/t1.15752-9/558081220_1338410691101424_114162715334196533_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=msVnDDNjb7gQ7kNvwEKqF_W&_nc_oc=AdlI6zXLEVJJWRDVHmvgaXEeWexxhmxnERlPe8O8EUhm-6SjEMzbX1Pk7lWPlaG-pYU&_nc_zt=23&_nc_ht=scontent.fhan2-4.fna&oh=03_Q7cD3gFZ4Cy1bshkuXn4niVZHhKimAE2-VrwGXr_dc7viQU0Lg&oe=69215AA0" alt="Aurora Spa Logo">
     </div>
-</div>
-
-<!-- BANNER -->
-<div class="banner">
-    <img src="images/blog1.jpg">
-    <img src="images/blog2.jpg">
-    <img src="images/blog3.jpg">
-    <img src="images/blog4.jpg">
-    <img src="images/blog5.jpg">
-    <img src="images/blog6.jpg">
-    <img src="images/blog7.jpg">
-</div>
-
-<!-- TITLE -->
-<div class="title-box">
-    <div class="title-big">BLOG SPA</div>
-    <div class="subtitle">– BÍ QUYẾT LÀM ĐẸP & CHĂM SÓC SỨC KHỎE</div>
-</div>
-
-<!-- FEATURED BLOG -->
-<div class="featured">
-    <div class="featured-img">
-        <img src="images/featured.jpg" alt="">
+    <nav>
+      <a href="#">Trang chủ</a>
+      <a href="#">Dịch vụ</a>
+      <a href="#" class="active">Blog</a>
+      <a href="#">Lịch hẹn</a>
+      <a href="#">FAQ</a>
+      <a href="#">Liên hệ</a>
+    </nav>
+    <div class="btns">
+      <!-- ✅ ĐÃ CHỈNH: Màu button giống hệt các trang khác -->
+      <button class="btn btn-login">ĐĂNG NHẬP</button>
+      <button class="btn btn-register">ĐĂNG KÝ</button>
     </div>
-    <div class="featured-content">
-        <div class="featured-title">Nghệ Thuật Massage – Bí Quyết Thư Giãn & Hồi Phục Cơ Thể</div>
-        <div class="featured-desc">
-            Trong cuộc sống bận rộn, đôi khi tâm trí và cơ thể chúng ta thường xuyên chịu áp lực từ công việc, học tập và môi trường. Massage tại Spa chính là “liều thuốc” tuyệt vời giúp giải tỏa căng thẳng.
-        </div>
-        <button class="btn-more">XEM THÊM</button>
+  </header>
+
+  <!-- HERO IMAGES -->
+  <div class="hero-images">
+    <img src="https://i.pinimg.com/736x/91/28/15/912815f7bd5cf713e619369d90dd968a.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/30/74/02/3074028d2343c87f4947d1b1eefc502a.jpg" alt="">
+    <img src="https://i.pinimg.com/1200x/ff/e4/31/ffe431a279388d674a8e127da9321437.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/57/bf/89/57bf892144946f12ded68649c8a493a9.jpg" alt="">
+    <img src="https://i.pinimg.com/1200x/f8/c9/68/f8c968bf2a5121dce028bd9e6f4ba723.jpg" alt="">
+    <img src="https://i.pinimg.com/736x/54/1b/06/541b06d0e77a3c70559e03713b82b48c.jpg" alt="">
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <section class="content">
+    <h1>BLOG SPA</h1>
+    <h2>– BÍ QUYẾT LÀM ĐẸP & CHĂM SÓC SỨC KHỎE –</h2>
+
+    <div class="blog-preview">
+      <img src="https://i.pinimg.com/1200x/22/b0/ce/22b0ce6f14ff6548ec4c7e758acf4a63.jpg" alt="Massage thư giãn">
+      <div class="blog-text">
+        <h3>Nghệ Thuật Massage – Bí Quyết Thư Giãn & Hồi Phục Cơ Thể</h3>
+        <p>
+          Trong cuộc sống bận rộn, cơ thể và tâm trí chúng ta thường xuyên chịu áp lực từ công việc,
+          học tập và môi trường. Một liệu trình massage tại Spa chính là "liều thuốc" tuyệt vời giúp
+          thư giãn và phục hồi năng lượng.
+        </p>
+        <!-- Nút chuyển sang BLOG 2.html -->
+        <a href="BLOG 2.html" class="btn-read">XEM THÊM</a>
+      </div>
     </div>
-</div>
+  </section>
 
 </body>
 </html>

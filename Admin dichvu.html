@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aurora Spa - Quản lý Dịch vụ</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* ===== RESET ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background-color: #f6f7f6;
+      color: #222;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: 220px;
+      background-color: #2e4d40;
+      color: white;
+      padding: 20px 10px;
+    }
+    .sidebar .logo {
+      font-size: 20px;
+      margin-bottom: 30px;
+      text-align: center;
+      font-weight: 700;
+    }
+    .sidebar .menu {
+      list-style: none;
+    }
+    .sidebar .menu li {
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      margin: 5px 0;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+    .sidebar .menu li:hover,
+    .sidebar .menu li.active {
+      background-color: #4b705a;
+    }
+    .sidebar .menu li span {
+      margin-left: 10px;
+    }
+
+    /* ===== MAIN ===== */
+    .main {
+      flex: 1;
+      padding: 30px;
+      background-color: #f6f7f6;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .top-left h1 {
+      font-size: 36px;
+      color: #222;
+      font-weight: 700;
+    }
+    .icon-row {
+      display: flex;
+      gap: 10px;
+      position: relative;
+    }
+    .icon-row .top-btn {
+      background: white;
+      border-radius: 8px;
+      padding: 8px;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid #ccc;
+    }
+    .icon-row .top-btn:hover {
+      background-color: #e0e0e0;
+    }
+    .icon-btn {
+      width: 24px;
+      height: 24px;
+      fill: white;
+      stroke: black;
+      stroke-width: 1;
+    }
+    .dot {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background-color: #ffc107;
+      border-radius: 50%;
+      top: 5px;
+      right: 5px;
+    }
+
+    .search-add-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .search-box {
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px 12px;
+      width: 200px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .search-box i {
+      color: #666;
+      font-size: 14px;
+    }
+    .search-box input {
+      border: none;
+      outline: none;
+      font-size: 14px;
+      width: 100%;
+      color: #333;
+    }
+
+    .search-box input::placeholder {
+      color: #999;
+    }
+
+    .add-btn {
+      background-color: #2e4d40;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    .add-btn:hover {
+      background-color: #446b59;
+    }
+
+    /* ===== TABLE ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .tick-box {
+      width: 50px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f1f1f1;
+      font-weight: 600;
+      color: #333;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: #f5f7f5;
+    }
+
+    a.service-id {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    a.service-id:hover {
+      text-decoration: underline;
+    }
+
+    .status-active {
+      color: #28a745;
+      font-weight: 500;
+    }
+
+    .status-inactive {
+      color: #dc3545;
+      font-weight: 500;
+    }
+
+    .price {
+      font-weight: 600;
+      color: #2e4d40;
+    }
+
+    .action-icon {
+      color: #2e4d40;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 0 5px;
+      text-decoration: none;
+    }
+
+    .action-icon:hover {
+      color: #446b59;
+    }
+
+    .action-icon.delete {
+      color: #dc3545;
+    }
+
+    .action-icon.delete:hover {
+      color: #c82333;
+    }
+
+    /* ===== PAGINATION ===== */
+        .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      margin-top: 25px;
+    }
+    .pagination button {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #ccc;
+      background: white;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #2e4d40;
+    }
+    .pagination button:hover:not(:disabled) {
+      background: #2e4d40;
+      color: white;
+    }
+    .pagination button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .pagination .page-active {
+      background: #2e4d40;
+      color: white;
+      border-color: #2e4d40;
+    }
+
+
+    /* ===== MODAL DELETE ===== */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.4);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .modal-content {
+      background-color: #dbe7e3;
+      padding: 25px 30px;
+      border-radius: 10px;
+      min-width: 500px;
+      text-align: center;
+    }
+
+    .modal h2 {
+      margin-bottom: 20px;
+      border-bottom: 1px solid #888;
+      padding-bottom: 10px;
+    }
+
+    .modal p {
+      font-size: 16px;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    .modal .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .modal .buttons button {
+      padding: 10px 25px;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .modal .buttons button.delete {
+      background-color: #dc3545;
+    }
+
+    .modal .buttons button.cancel {
+      background-color: #888;
+    }
+
+    .modal .buttons button:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">Aurora Spa</div>
+    <ul class="menu">
+      <li><span>Khách hàng</span></li>
+      <li class="active"><span>Dịch vụ</span></li>
+      <li><span>Blog</span></li>
+      <li><span>Lịch hẹn</span></li>
+      <li><span>Ưu đãi</span></li>
+      <li><span>FAQ</span></li>
+      <li><span>Tích điểm</span></li>
+      <li><span>Cài đặt</span></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="top-bar">
+      <div class="top-left">
+        <h1>DANH SÁCH DỊCH VỤ</h1>
+      </div>
+      <div class="icon-row">
+        <button class="top-btn" title="Thông báo">
+          <svg class="icon-btn" viewBox="0 0 24 24">
+            <path d="M6 8a6 6 0 0 1 12 0v5l2 2H4l2-2V8"/>
+            <path d="M9 19a3 3 0 0 0 6 0"/>
+          </svg>
+          <span class="dot"></span>
+        </button>
+        <button class="top-btn" title="Tin nhắn">
+          <svg class="icon-btn" viewBox="0 0 24 24">
+            <path d="M21 15a4 4 0 0 1-4 4H8l-5 4V6a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+          </svg>
+        </button>
+        <button class="top-btn" title="Tài khoản">
+          <svg class="icon-btn" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M20 20a8 8 0 1 0-16 0"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="search-add-row">
+      <button class="add-btn" id="createServiceBtn">+ Tạo mới dịch vụ</button>
+      <div class="search-box">
+        <i class="fas fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Tìm kiếm" oninput="filterTable()">
+      </div>
+    </div>
+
+    <table id="serviceTable">
+      <thead>
+        <tr>
+          <th class="tick-box"><input type="checkbox" id="selectAll"></th>
+          <th> Mã dịch vụ</th>
+          <th> Thời gian </th>
+          <th>Giá</th>
+          <th>Tên dịch vụ</th>
+          <th>Hành động</th>
+          <th>Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-service-id="SRV001">
+          <td class="tick-box"><input type="checkbox" class="select-row"></td>
+          <td><a href="admin-dvu-edit.html?serviceId=SRV001" class="service-id">#SRV001</a></td>
+          <td>30 phút</td>
+          <td><span class="price">500.000đ</span></td>
+          <td>Massage Tinh Dầu</td>
+          <td>
+            <a href="Dichvu2.html?serviceId=SRV001" class="action-icon" title="View">👁️</a>
+            <a href="admin-dvu-edit.html?serviceId=SRV001" class="action-icon" title="Edit">✏️</a>
+            <a class="action-icon delete" onclick="deleteService('DV001')" title="Delete">🗑️</a>
+          </td>
+          <td><span class="status-active">Đang hoạt động</span></td>
+        </tr>
+        <tr data-service-id="SRV002">
+          <td class="tick-box"><input type="checkbox" class="select-row"></td>
+          <td><a href="admin-dvu-edit.html?serviceId=SRV002" class="service-id">#SRV002</a></td>
+          <td>45 phút</td>
+          <td><span class="price">350.000đ</span></td>
+          <td>Chăm sóc da mặt</td>
+          <td>
+            <a href="Dichvu2.html?serviceId=SRV002" class="action-icon" title="View">👁️</a>
+            <a href="admin-dvu-edit.html?serviceId=SRV002" class="action-icon" title="Edit">✏️</a>
+            <a class="action-icon delete" onclick="deleteService('DV002')" title="Delete">🗑️</a>
+          </td>
+          <td><span class="status-active">Đang hoạt động</span></td>
+        </tr>
+        <tr data-service-id="SRV003">
+          <td class="tick-box"><input type="checkbox" class="select-row"></td>
+          <td><a href="admin-dvu-edit.html?serviceId=DV003" class="service-id">#SRV003</a></td>
+          <td>90 phút</td>
+          <td><span class="price">800.000đ</span></td>
+          <td>Massage Đầy đủ</td>
+          <td>
+            <a href="Dichvu2.html?serviceId=SRV003" class="action-icon" title="View">👁️</a>
+            <a href="admin-dvu-edit.html?serviceId=SRV003" class="action-icon" title="Edit">✏️</a>
+            <a class="action-icon delete" onclick="deleteService('DV003')" title="Delete">🗑️</a>
+          </td>
+          <td><span class="status-active">Đang hoạt động</span></td>
+        </tr>
+        <tr data-service-id="SRV004">
+          <td class="tick-box"><input type="checkbox" class="select-row"></td>
+          <td><a href="admin-dvu-edit.html?serviceId=SRV004" class="service-id">#SRV004</a></td>
+          <td>30 phút</td>
+          <td><span class="price">250.000đ</span></td>
+          <td>Gội đầu dưỡng</td>
+          <td>
+            <a href="Dichvu2.html?serviceId=SRV004" class="action-icon" title="View">👁️</a>
+            <a href="admin-dvu-edit.html?serviceId=SRV004" class="action-icon" title="Edit">✏️</a>
+            <a class="action-icon delete" onclick="deleteService('DV004')" title="Delete">🗑️</a>
+          </td>
+          <td><span class="status-active">Đang hoạt động</span></td>
+        </tr>
+        <tr data-service-id="SRV005">
+          <td class="tick-box"><input type="checkbox" class="select-row"></td>
+          <td><a href="admin-dvu-edit.html?serviceId=SRV005" class="service-id">#SRV005</a></td>
+          <td>75 phút</td>
+          <td><span class="price">650.000đ</span></td>
+          <td>Chăm sóc Body</td>
+          <td>
+            <a href="Dichvu2.html?serviceId=SRV005" class="action-icon" title="View">👁️</a>
+            <a href="admin-dvu-edit.html?serviceId=SRV005" class="action-icon" title="Edit">✏️</a>
+            <a class="action-icon delete" onclick="deleteService('DV005')" title="Delete">🗑️</a>
+          </td>
+          <td><span class="status-active">Đang hoạt động</span></td>
+        </tr>
+        <tr data-service-id="SRV006">
+          <td class="tick-box"><input type="checkbox" class="select-row"></td>
+          <td><a href="admin-dvu-edit.html?serviceId=SRV006" class="service-id">#SRV006</a></td>
+          <td>40 phút</td>
+          <td><span class="price">400.000đ</span></td>
+          <td>Tẩy tế bào chết toàn thân</td>
+          <td>
+            <a href="Dichvu2.html?serviceId=SRV006" class="action-icon" title="View">👁️</a>
+            <a href="admin-dvu-edit.html?serviceId=SRV006" class="action-icon" title="Edit">✏️</a>
+            <a class="action-icon delete" onclick="deleteService('DV006')" title="Delete">🗑️</a>
+          </td>
+          <td><span class="status-active">Đang hoạt động</span></td>
+        </tr>
+        <tr data-service-id="SRV007">
+          <td class="tick-box"><input type="checkbox" class="select-row"></td>
+          <td><a href="admin-dvu-edit.html?serviceId=SRV007" class="service-id">#SRV007</a></td>
+          <td>45 phút</td>
+          <td><span class="price">450.000đ</span></td>
+          <td>Massage Chân</td>
+          <td>
+            <a href="Dichvu2.html?serviceId=SRV007" class="action-icon" title="View">👁️</a>
+            <a href="admin-dvu-edit.html?serviceId=SRV007" class="action-icon" title="Edit">✏️</a>
+            <a class="action-icon delete" onclick="deleteService('DV007')" title="Delete">🗑️</a>
+          </td>
+          <td><span class="status-active">Đang hoạt động</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- PAGINATION - DÒNG CUỐI -->
+    <div class="pagination">
+      <button onclick="changePage(-1)" title="Trang trước">‹</button>
+      <button class="page-active">1</button>
+      <button onclick="changePage(1)" title="Trang sau">›</button>
+    </div>
+
+  </main>
+
+  <!-- DELETE MODAL -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <h2>Xóa Dịch vụ</h2>
+      <p>Bạn có chắc muốn xóa dịch vụ này không?<br><strong>Hành động này không thể hoàn tác</strong></p>
+      <div class="buttons">
+        <button class="delete" id="confirmDeleteBtn">Xóa</button>
+        <button class="cancel" onclick="closeDeleteModal()">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Select All Checkbox
+    document.getElementById('selectAll').addEventListener('change', function() {
+      const checkboxes = document.querySelectorAll('.select-row');
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = this.checked;
+      });
+    });
+
+    let currentServiceId = null;
+
+    // Create Service Button
+    document.getElementById("createServiceBtn").addEventListener("click", () => {
+      window.location.href = "tao-dich-vu.html";
+    });
+
+    function deleteService(serviceId) {
+      currentServiceId = serviceId;
+      document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').style.display = 'none';
+      currentServiceId = null;
+    }
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+      if (currentServiceId) {
+        const row = document.querySelector(`tr[data-service-id="${currentServiceId}"]`);
+        if (row) {
+          row.style.transition = 'opacity 0.3s ease';
+          row.style.opacity = '0';
+          setTimeout(() => row.remove(), 300);
+        }
+        closeDeleteModal();
+        setTimeout(() => alert('✅ Đã xóa Dịch vụ thành công!'), 350);
+      }
+    });
+
+    function viewService(serviceId) {
+      window.location.href = `Dichvu2.html?serviceId=${serviceId}`;
+    }
+
+    // Search Function
+    function filterTable() {
+      const input = document.getElementById('searchInput');
+      const filter = input.value.toLowerCase();
+      const table = document.getElementById('serviceTable');
+      const tr = table.getElementsByTagName('tr');
+
+      for (let i = 1; i < tr.length; i++) {
+        const td = tr[i].getElementsByTagName('td');
+        let found = false;
+
+        // Skip the first column (tick box)
+        for (let j = 1; j < td.length; j++) {
+          if (td[j]) {
+            const txtValue = td[j].textContent || td[j].innerText;
+            if (txtValue.toLowerCase().indexOf(filter) > -1) {
+              found = true;
+              break;
+            }
+          }
+        }
+
+        tr[i].style.display = found ? '' : 'none';
+      }
+    }
+  </script>
+</body>
+</html>

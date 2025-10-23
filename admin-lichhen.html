@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurora Spa - Danh sách lịch hẹn</title>
+<style>
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ===== LAYOUT ===== */
+body {
+  display: flex;
+  height: 100vh;
+  background-color: #f6f7f6;
+  color: #222;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 220px;
+  background-color: #2e4d40;
+  color: white;
+  padding: 20px 10px;
+}
+.sidebar h2 {
+  font-size: 20px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+.sidebar ul {
+  list-style: none;
+}
+.sidebar li {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  margin: 5px 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.sidebar li:hover,
+.sidebar li.active {
+  background-color: #4b705a;
+}
+.sidebar li span {
+  margin-left: 10px;
+}
+
+/* ===== MAIN ===== */
+.main {
+  flex: 1;
+  padding: 30px;
+}
+
+/* ===== HEADER (TIÊU ĐỀ VÀ ICONS) ===== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.main h1 {
+  font-size: 36px;
+}
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.top-btn {
+  background: white;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ccc;
+}
+.top-btn:hover {
+  background-color: #e0e0e0;
+}
+.icon-btn {
+  width: 24px;
+  height: 24px;
+  fill: white;
+  stroke: black;
+  stroke-width: 1;
+}
+.dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background-color: #ffc107;
+  border-radius: 50%;
+  top: 5px;
+  right: 5px;
+}
+#searchInput {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  width: 200px;
+}
+
+/* ===== FILTER BAR ===== */
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.filter-left {
+  display: flex;
+  gap: 10px;
+}
+.filter-bar input, .filter-bar select, .filter-bar button {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+}
+.add-btn {
+  background-color: #2e4d40;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.add-btn:hover {
+  background-color: #446b59;
+}
+
+/* ===== TABLE ===== */
+.card {
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+}
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+th, td {
+  padding: 12px 15px;
+  text-align: left; /* Giữ căn lề trái như bảng gốc */
+}
+th {
+  background-color: #f1f1f1;
+}
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.actions button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 5px;
+}
+
+/* Thêm: CSS cho nút phân trang (Trên, Dưới) */
+.card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px;
+    border-top: 1px solid #ccc;
+    background: #fff;
+}
+.pg {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+}
+.pg:active {
+    transform: scale(.98);
+}
+
+/* ===== MODAL ===== */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.modal-content {
+  background-color: #dbe7e3;
+  padding: 25px 30px;
+  border-radius: 10px;
+  min-width: 500px;
+}
+.modal h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #888;
+  padding-bottom: 10px;
+}
+.modal label {
+  font-weight: 600;
+  display: block;
+  margin-top: 10px;
+}
+.modal input, .modal select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+.modal .buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+.modal .buttons button {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  background-color: #2e4d40;
+  cursor: pointer;
+}
+.modal .buttons button.cancel {
+  background-color: #888;
+}
+.modal .buttons button:hover {
+  opacity: 0.9;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <h2>Aurora Spa</h2>
+  <ul>
+    <li><span>Khách hàng</span></li>
+    <li><span>Dịch vụ</span></li>
+    <li><span>Blog</span></li>
+    <li class="active"><span>Lịch hẹn</span></li>
+    <li><span>FAQ</span></li>
+    <li><span>Tích điểm</span></li>
+    <li><span>Cài đặt</span></li>
+  </ul>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+  <div class="header">
+    <h1>DANH SÁCH LỊCH HẸN</h1>
+    <div class="top-right">
+      <button class="top-btn" title="Thông báo">
+        <svg class="icon-btn" viewBox="0 0 24 24">
+          <path d="M6 8a6 6 0 0 1 12 0v5l2 2H4l2-2V8"/>
+          <path d="M9 19a3 3 0 0 0 6 0"/>
+        </svg>
+        <span class="dot"></span>
+      </button>
+      <button class="top-btn" title="Tin nhắn">
+        <svg class="icon-btn" viewBox="0 0 24 24">
+          <path d="M21 15a4 4 0 0 1-4 4H8l-5 4V6a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+        </svg>
+      </button>
+      <button class="top-btn" title="Tài khoản">
+        <svg class="icon-btn" viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M20 20a8 8 0 1 0-16 0"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="filter-bar">
+    <div class="filter-left">
+      <button class="add-btn" onclick="openModal('addModal')">+ Thêm lịch hẹn mới</button>
+      <input type="date" id="dateFilter" onchange="filterTable()">
+      <select id="serviceFilter" onchange="filterTable()">
+        <option value="all">Dịch vụ</option>
+        <option value="Chăm sóc mặt toàn diện">Chăm sóc mặt toàn diện</option>
+        <option value="Massage thư giãn">Massage thư giãn</option>
+        <option value="Tẩy tế bào chết">Tẩy tế bào chết</option>
+        <option value="Chăm sóc da cao cấp">Chăm sóc da cao cấp</option>
+        <option value="Gội đầu dưỡng sinh">Gội đầu dưỡng sinh</option>
+      </select>
+    </div>
+    <input type="text" id="searchInput" placeholder="Tìm kiếm" oninput="filterTable()">
+  </div>
+
+  <div class="card">
+    <div class="table-wrap">
+      <table id="appointmentTable">
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="selectAll"></th>
+            <th>ID</th>
+            <th>Ngày</th>
+            <th>Giờ</th>
+            <th>Trạng thái</th>
+            <th>Khách hàng</th>
+            <th>Dịch vụ</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody id="appointmentTbody">
+          <tr data-id="LH0001" data-customer="Nguyễn Văn A" data-service="Chăm sóc mặt toàn diện" data-email="nguyenvana@gmail.com" data-phone="0947275783" data-date="2022-09-23" data-display-date="23/09/2022">
+            <td><input type="checkbox" class="rowSel"></td>
+            <td>#LH0001</td>
+            <td>23/09/2022</td>
+            <td>19h</td>
+            <td>Đã đặt</td>
+            <td>Nguyễn Văn A</td>
+            <td>Chăm sóc mặt toàn diện</td>
+            <td class="actions">
+              <button onclick="openDetailModal('Chăm sóc mặt toàn diện', '19h - 20h10p, Ngày 23/09/2022', 'Đã đặt', 'Nguyễn Văn A', 'nguyenvana@gmail.com', '0947275783')">👁️</button>
+              <button onclick="openEditModal('Nguyễn Văn A', 'nguyenvana@gmail.com', '0947275783', 'Chăm sóc da', 'Chăm sóc mặt toàn diện', '2022-09-23', '19h', '')">✏️</button>
+              <button onclick="openDeleteModal(this)">🗑️</button>
+            </td>
+          </tr>
+          <tr data-id="LH0002" data-customer="Trần Thị Bích Ngọc" data-service="Massage thư giãn" data-email="tranbichngoc@gmail.com" data-phone="0912345678" data-date="2022-09-24" data-display-date="24/09/2022">
+            <td><input type="checkbox" class="rowSel"></td>
+            <td>#LH0002</td>
+            <td>24/09/2022</td>
+            <td>14h</td>
+            <td>Đã đặt</td>
+            <td>Trần Thị Bích Ngọc</td>
+            <td>Massage thư giãn</td>
+            <td class="actions">
+              <button onclick="openDetailModal('Massage thư giãn', '14h - 15h, Ngày 24/09/2022', 'Đã đặt', 'Trần Thị Bích Ngọc', 'tranbichngoc@gmail.com', '0912345678')">👁️</button>
+              <button onclick="openEditModal('Trần Thị Bích Ngọc', 'tranbichngoc@gmail.com', '0912345678', 'Massage', 'Massage thư giãn', '2022-09-24', '14h', '')">✏️</button>
+              <button onclick="openDeleteModal(this)">🗑️</button>
+            </td>
+          </tr>
+          <tr data-id="LH0003" data-customer="Lê Minh Tuấn" data-service="Tẩy tế bào chết" data-email="leminhtuan@gmail.com" data-phone="0935123456" data-date="2022-09-25" data-display-date="25/09/2022">
+            <td><input type="checkbox" class="rowSel"></td>
+            <td>#LH0003</td>
+            <td>25/09/2022</td>
+            <td>10h</td>
+            <td>Đã đặt</td>
+            <td>Lê Minh Tuấn</td>
+            <td>Tẩy tế bào chết</td>
+            <td class="actions">
+              <button onclick="openDetailModal('Tẩy tế bào chết', '10h - 11h, Ngày 25/09/2022', 'Đã đặt', 'Lê Minh Tuấn', 'leminhtuan@gmail.com', '0935123456')">👁️</button>
+              <button onclick="openEditModal('Lê Minh Tuấn', 'leminhtuan@gmail.com', '0935123456', 'Chăm sóc da', 'Tẩy tế bào chết', '2022-09-25', '10h', '')">✏️</button>
+              <button onclick="openDeleteModal(this)">🗑️</button>
+            </td>
+          </tr>
+          <tr data-id="LH0004" data-customer="Phạm Quốc Hưng" data-service="Chăm sóc da cao cấp" data-email="phamquochung@gmail.com" data-phone="0987654321" data-date="2022-09-26" data-display-date="26/09/2022">
+            <td><input type="checkbox" class="rowSel"></td>
+            <td>#LH0004</td>
+            <td>26/09/2022</td>
+            <td>16h</td>
+            <td>Đã đặt</td>
+            <td>Phạm Quốc Hưng</td>
+            <td>Chăm sóc da cao cấp</td>
+            <td class="actions">
+              <button onclick="openDetailModal('Chăm sóc da cao cấp', '16h - 17h, Ngày 26/09/2022', 'Đã đặt', 'Phạm Quốc Hưng', 'phamquochung@gmail.com', '0987654321')">👁️</button>
+              <button onclick="openEditModal('Phạm Quốc Hưng', 'phamquochung@gmail.com', '0987654321', 'Chăm sóc da', 'Chăm sóc da cao cấp', '2022-09-26', '16h', '')">✏️</button>
+              <button onclick="openDeleteModal(this)">🗑️</button>
+            </td>
+          </tr>
+          <tr data-id="LH0005" data-customer="Hoàng Thị Lan" data-service="Gội đầu dưỡng sinh" data-email="hoangthilan@gmail.com" data-phone="0971234567" data-date="2022-09-27" data-display-date="27/09/2022">
+            <td><input type="checkbox" class="rowSel"></td>
+            <td>#LH0005</td>
+            <td>27/09/2022</td>
+            <td>18h</td>
+            <td>Đã đặt</td>
+            <td>Hoàng Thị Lan</td>
+            <td>Gội đầu dưỡng sinh</td>
+            <td class="actions">
+              <button onclick="openDetailModal('Gội đầu dưỡng sinh', '18h - 19h, Ngày 27/09/2022', 'Đã đặt', 'Hoàng Thị Lan', 'hoangthilan@gmail.com', '0971234567')">👁️</button>
+              <button onclick="openEditModal('Hoàng Thị Lan', 'hoangthilan@gmail.com', '0971234567', 'Chăm sóc tóc', 'Gội đầu dưỡng sinh', '2022-09-27', '18h', '')">✏️</button>
+              <button onclick="openDeleteModal(this)">🗑️</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Thêm: Phần chân bảng chứa các nút phân trang -->
+    <div class="card-footer">
+      <div class="pg" id="pgPrev">‹</div>
+      <div id="pgInfo">1</div>
+      <div class="pg" id="pgNext">›</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODALS ============ -->
+<!-- Chi tiết -->
+<div id="detailModal" class="modal">
+  <div class="modal-content">
+    <h2>Chi tiết lịch hẹn</h2>
+    <p><b>Dịch vụ:</b> <span id="detailService"></span></p>
+    <p><b>Thời gian:</b> <span id="detailTime"></span></p>
+    <p><b>Trạng thái:</b> <span id="detailStatus"></span></p>
+    <p><b>Khách hàng:</b><br>
+    <span id="detailCustomer"></span></p>
+    <div class="buttons">
+      <button class="cancel" onclick="closeModal('detailModal')">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<!-- Thêm -->
+<div id="addModal" class="modal">
+  <div class="modal-content">
+    <h2>Thêm lịch hẹn</h2>
+    <label>Họ và tên *</label>
+    <input id="addName">
+    <label>Email *</label>
+    <input id="addEmail">
+    <label>Số điện thoại *</label>
+    <input id="addPhone">
+    <label>Danh mục dịch vụ *</label>
+    <input id="addCategory">
+    <label>Dịch vụ *</label>
+    <input id="addService">
+    <label>Ngày đặt *</label>
+    <input type="date" id="addDate">
+    <label>Khung giờ *</label>
+    <input id="addTime">
+    <label>Mã giảm giá</label>
+    <input id="addDiscount">
+    <div class="buttons">
+      <button onclick="addAppointment()">Thêm</button>
+      <button class="cancel" onclick="closeModal('addModal')">Hủy</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sửa -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <h2>Chỉnh sửa lịch hẹn</h2>
+    <label>Họ và tên *</label>
+    <input id="editName">
+    <label>Email *</label>
+    <input id="editEmail">
+    <label>Số điện thoại *</label>
+    <input id="editPhone">
+    <label>Danh mục dịch vụ *</label>
+    <input id="editCategory">
+    <label>Dịch vụ *</label>
+    <input id="editService">
+    <label>Ngày đặt *</label>
+    <input type="date" id="editDate">
+    <label>Khung giờ *</label>
+    <input id="editTime">
+    <label>Mã giảm giá</label>
+    <input id="editDiscount">
+    <div class="buttons">
+      <button onclick="saveEdit()">Cập nhật</button>
+      <button class="cancel" onclick="closeModal('editModal')">Hủy</button>
+    </div>
+  </div>
+</div>
+
+<!-- Xóa -->
+<div id="deleteModal" class="modal">
+  <div class="modal-content" style="text-align:center">
+    <h2>Xóa lịch hẹn</h2>
+    <p>Bạn có chắc chắn muốn hủy lịch hẹn này không?<br>Hành động này không thể hoàn tác.</p>
+    <div class="buttons">
+      <button id="confirmDelete">Xác nhận</button>
+      <button class="cancel" onclick="closeModal('deleteModal')">Hủy bỏ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const appointments = [
+  { id: 'LH0001', date: '2022-09-23', displayDate: '23/09/2022', time: '19h', status: 'Đã đặt', customer: 'Nguyễn Văn A', service: 'Chăm sóc mặt toàn diện', email: 'nguyenvana@gmail.com', phone: '0947275783', category: 'Chăm sóc da', discount: '' },
+  { id: 'LH0002', date: '2022-09-24', displayDate: '24/09/2022', time: '14h', status: 'Đã đặt', customer: 'Trần Thị Bích Ngọc', service: 'Massage thư giãn', email: 'tranbichngoc@gmail.com', phone: '0912345678', category: 'Massage', discount: '' },
+  { id: 'LH0003', date: '2022-09-25', displayDate: '25/09/2022', time: '10h', status: 'Đã đặt', customer: 'Lê Minh Tuấn', service: 'Tẩy tế bào chết', email: 'leminhtuan@gmail.com', phone: '0935123456', category: 'Chăm sóc da', discount: '' },
+  { id: 'LH0004', date: '2022-09-26', displayDate: '26/09/2022', time: '16h', status: 'Đã đặt', customer: 'Phạm Quốc Hưng', service: 'Chăm sóc da cao cấp', email: 'phamquochung@gmail.com', phone: '0987654321', category: 'Chăm sóc da', discount: '' },
+  { id: 'LH0005', date: '2022-09-27', displayDate: '27/09/2022', time: '18h', status: 'Đã đặt', customer: 'Hoàng Thị Lan', service: 'Gội đầu dưỡng sinh', email: 'hoangthilan@gmail.com', phone: '0971234567', category: 'Chăm sóc tóc', discount: '' }
+];
+
+// Thêm: Biến trạng thái để theo dõi trang hiện tại và số lượng mục mỗi trang
+let currentPage = 1;
+const pageSize = 5;
+let currentDeleteRow;
+
+const el = s => document.querySelector(s);
+const els = s => Array.from(document.querySelectorAll(s));
+const autoId = () => {
+  const num = Math.max(0, ...appointments.map(a => +String(a.id).replace(/\D/g, ''))) + 1;
+  return '#LH' + String(num).padStart(4, '0');
+};
+
+function applyFilters(list) {
+  const dateFilter = el('#dateFilter').value;
+  const serviceFilter = el('#serviceFilter').value;
+  const searchInput = el('#searchInput').value.toLowerCase();
+
+  function formatDateToDisplay(isoDate) {
+    if (!isoDate) return '';
+    const [year, month, day] = isoDate.split('-');
+    return `${day}/${month}/${year}`;
+  }
+
+  return list.filter(r => {
+    const displayDate = r.displayDate;
+    const id = r.id.toLowerCase();
+    const time = r.time.toLowerCase();
+    const status = r.status.toLowerCase();
+    const customer = r.customer.toLowerCase();
+    const service = r.service.toLowerCase();
+
+    const matchesDate = !dateFilter || formatDateToDisplay(dateFilter) === displayDate;
+    const matchesService = serviceFilter === 'all' || service === serviceFilter.toLowerCase();
+    const matchesSearch = (
+      id.includes(searchInput) ||
+      displayDate.includes(searchInput) ||
+      time.includes(searchInput) ||
+      status.includes(searchInput) ||
+      customer.includes(searchInput) ||
+      service.includes(searchInput)
+    );
+
+    return matchesDate && matchesService && matchesSearch;
+  });
+}
+
+// Thêm: Logic phân trang để hiển thị dữ liệu theo trang
+function renderTable() {
+  const filtered = applyFilters(appointments);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  currentPage = Math.min(currentPage, totalPages);
+  const start = (currentPage - 1) * pageSize;
+  const rows = filtered.slice(start, start + pageSize);
+
+  const tbody = el('#appointmentTbody');
+  tbody.innerHTML = rows.map(r => `
+    <tr data-id="${r.id}" data-customer="${r.customer}" data-service="${r.service}" data-email="${r.email}" data-phone="${r.phone}" data-date="${r.date}" data-display-date="${r.displayDate}">
+      <td><input type="checkbox" class="rowSel"></td>
+      <td>${r.id}</td>
+      <td>${r.displayDate}</td>
+      <td>${r.time}</td>
+      <td>${r.status}</td>
+      <td>${r.customer}</td>
+      <td>${r.service}</td>
+      <td class="actions">
+        <button onclick="openDetailModal('${r.service}', '${r.time} - ${r.time.replace('h', 'h').replace('h', 'h10p')}, Ngày ${r.displayDate}', '${r.status}', '${r.customer}', '${r.email}', '${r.phone}')">👁️</button>
+        <button onclick="openEditModal('${r.customer}', '${r.email}', '${r.phone}', '${r.category}', '${r.service}', '${r.date}', '${r.time}', '${r.discount}')">✏️</button>
+        <button onclick="openDeleteModal(this)">🗑️</button>
+      </td>
+    </tr>
+  `).join('');
+
+  // Thêm: Cập nhật số trang hiện tại trên giao diện
+  el('#pgInfo').textContent = currentPage;
+
+  const all = el('#selectAll');
+  all.checked = rows.length > 0 && rows.every(r => el(`tr[data-id="${r.id}"] input.rowSel`).checked);
+  all.indeterminate = !all.checked && rows.some(r => el(`tr[data-id="${r.id}"] input.rowSel`).checked);
+  all.onclick = (e) => {
+    rows.forEach(r => {
+      const cb = el(`tr[data-id="${r.id}"] input.rowSel`);
+      cb.checked = e.target.checked;
+    });
+  };
+}
+
+function openModal(id) {
+  el('#' + id).style.display = 'flex';
+  if (id === 'addModal') {
+    el('#addName').value = '';
+    el('#addEmail').value = '';
+    el('#addPhone').value = '';
+    el('#addCategory').value = '';
+    el('#addService').value = '';
+    el('#addDate').value = '';
+    el('#addTime').value = '';
+    el('#addDiscount').value = '';
+  }
+}
+
+function closeModal(id) {
+  el('#' + id).style.display = 'none';
+}
+
+function openDetailModal(service, time, status, name, email, phone) {
+  el('#detailService').textContent = service || '';
+  el('#detailTime').textContent = time;
+  el('#detailStatus').textContent = status;
+  el('#detailCustomer').innerHTML = name ?
+    `Họ và tên: ${name}<br>Email: ${email}<br>SĐT: ${phone}` : '';
+  openModal('detailModal');
+}
+
+function openEditModal(name, email, phone, category, service, date, time, discount) {
+  el('#editName').value = name || '';
+  el('#editEmail').value = email || '';
+  el('#editPhone').value = phone || '';
+  el('#editCategory').value = category || '';
+  el('#editService').value = service || '';
+  el('#editDate').value = date || '';
+  el('#editTime').value = time || '';
+  el('#editDiscount').value = discount || '';
+  openModal('editModal');
+}
+
+function openDeleteModal(btn) {
+  currentDeleteRow = btn.closest('tr');
+  openModal('deleteModal');
+}
+
+function confirmDelete() {
+  const id = currentDeleteRow.getAttribute('data-id');
+  const index = appointments.findIndex(a => a.id === id);
+  if (index > -1) {
+    appointments.splice(index, 1);
+  }
+  renderTable();
+  closeModal('deleteModal');
+}
+
+function addAppointment() {
+  const newAppointment = {
+    id: autoId(),
+    date: el('#addDate').value,
+    displayDate: el('#addDate').value.split('-').reverse().join('/'),
+    time: el('#addTime').value,
+    status: 'Đã đặt',
+    customer: el('#addName').value,
+    service: el('#addService').value,
+    email: el('#addEmail').value,
+    phone: el('#addPhone').value,
+    category: el('#addCategory').value,
+    discount: el('#addDiscount').value
+  };
+  if (!newAppointment.customer || !newAppointment.email || !newAppointment.phone || !newAppointment.category || !newAppointment.service || !newAppointment.date || !newAppointment.time) {
+    alert('Vui lòng nhập đầy đủ thông tin bắt buộc');
+    return;
+  }
+  appointments.unshift(newAppointment);
+  currentPage = 1;
+  renderTable();
+  closeModal('addModal');
+}
+
+function saveEdit() {
+  const id = currentDeleteRow.getAttribute('data-id');
+  const appointment = appointments.find(a => a.id === id);
+  if (appointment) {
+    appointment.customer = el('#editName').value;
+    appointment.email = el('#editEmail').value;
+    appointment.phone = el('#editPhone').value;
+    appointment.category = el('#editCategory').value;
+    appointment.service = el('#editService').value;
+    appointment.date = el('#editDate').value;
+    appointment.displayDate = el('#editDate').value.split('-').reverse().join('/');
+    appointment.time = el('#editTime').value;
+    appointment.discount = el('#editDiscount').value;
+  }
+  renderTable();
+  closeModal('editModal');
+}
+
+function filterTable() {
+  currentPage = 1;
+  renderTable();
+}
+
+// Thêm: Sự kiện cho nút "Trước" để quay lại trang trước
+el('#pgPrev').onclick = () => {
+  if (currentPage > 1) {
+    currentPage--;
+    renderTable();
+  }
+};
+
+// Thêm: Sự kiện cho nút "Sau" để chuyển sang trang tiếp theo
+el('#pgNext').onclick = () => {
+  currentPage++;
+  renderTable();
+};
+
+el('#confirmDelete').onclick = confirmDelete;
+
+renderTable();
+</script>
+</body>
+</html>

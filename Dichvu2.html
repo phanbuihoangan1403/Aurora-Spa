@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Massage Tinh Dầu | Aurora Spa</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f5ee;
+      color: #4a4a4a;
+    }
+
+    /* HEADER */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      background-color: #f8f5ee;
+    }
+
+   .logo img {
+      height: 80px;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #3f3f3f;
+      font-weight: 500;
+      position: relative;
+      transition: 0.3s;
+    }
+
+    nav ul li a:hover::after,
+    nav ul li a.active::after {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #2d2d2d;
+    }
+
+    nav ul li a:hover {
+      color: #2d2d2d;
+    }
+
+    .menu-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* ✅ ĐÃ CHỈNH: Màu button giống hệt các trang khác */
+    .btn-login {
+      background-color: #2e4d40;
+      color: white;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-login:hover {
+      background-color: #446b59;
+    }
+
+    .btn-signup {
+      background-color: #d1a054;
+      color: white;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-signup:hover {
+      background-color: #b88439;
+    }
+
+    /* MAIN CONTENT */
+    .content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 60px;
+      padding: 40px 80px;
+    }
+
+    .content img {
+      width: 400px;
+      border-radius: 200px 200px 0 0;
+    }
+
+    .text-content {
+      max-width: 550px;
+      position: relative;
+    }
+
+    /* Mũi tên quay lại nằm trên */
+    .back-arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #2f4f3e;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 18px;
+      margin-bottom: 10px;
+      transition: 0.3s;
+    }
+
+    .back-arrow::before {
+      content: "←";
+      font-size: 22px;
+    }
+
+    .back-arrow:hover {
+      color: #5f8d4e;
+    }
+
+    .text-content h2 {
+      color: #2f4f3e;
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      margin-top: 0;
+    }
+
+    .text-content ul {
+      list-style: disc;
+      padding-left: 20px;
+      margin: 20px 0;
+      line-height: 2.0;
+    }
+
+    .text-content p {
+      line-height: 2.0;
+      margin-bottom: 20px;
+    }
+
+    .btn-book {
+      background-color: #3f5941;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 20px;
+    }
+
+    .btn-book:hover {
+      background-color: #2f4633;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <img src="https://scontent.fhan2-4.fna.fbcdn.net/v/t1.15752-9/558081220_1338410691101424_114162715334196533_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=msVnDDNjb7gQ7kNvwEKqF_W&_nc_oc=AdlI6zXLEVJJWRDVHmvgaXEeWexxhmxnERlPe8O8EUhm-6SjEMzbX1Pk7lWPlaG-pYU&_nc_zt=23&_nc_ht=scontent.fhan2-4.fna&oh=03_Q7cD3gFZ4Cy1bshkuXn4niVZHhKimAE2-VrwGXr_dc7viQU0Lg&oe=69215AA0" alt="Aurora Spa Logo" />
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#">Trang chủ</a></li>
+        <li><a href="#" style="border-bottom: 2px solid #50684b;">Dịch vụ</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Lịch hẹn</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Liên hệ</a></li>
+      </ul>
+    </nav>
+    <div class="menu-buttons">
+      <!-- ✅ ĐÃ CHỈNH: Màu button giống hệt các trang khác -->
+      <button class="btn-login">ĐĂNG NHẬP</button>
+      <button class="btn-signup">ĐĂNG KÝ</button>
+    </div>
+  </header>
+
+  <main class="content">
+    <img src="https://i.pinimg.com/736x/35/f8/fc/35f8fc996250e57842b099e5befbf81b.jpg" alt="Massage toàn thân" />
+    <div class="text-content">
+      <!-- ✅ ĐÃ CHỈNH: Mũi tên quay lại → "Admin dichvu.html" -->
+      <a href="Admin dichvu.html" class="back-arrow"></a>
+
+      <h2>MASSAGE TINH DẦU</h2>
+
+      <p>
+        Liệu trình chăm sóc body chuyên sâu mang đến cho khách hàng sự thư giãn tuyệt đối và phục hồi năng lượng sau những giờ làm việc căng thẳng.
+        Dịch vụ kết hợp giữa massage trị liệu nhẹ nhàng và chăm sóc dưỡng chất cho da, giúp cơ thể được thư thái, làn da trở nên mềm mại và tinh thần sảng khoái.
+      </p>
+      <ul>
+        <li><b>Thời gian thực hiện:</b> 100 phút</li>
+        <li><b>Giá dịch vụ:</b> 750.000đ</li>
+        <li><b>Liệu trình:</b> Massage tinh dầu, đá nóng và túi chườm thảo dược</li>
+        <li><b>Nhân viên thực hiện:</b> Kỹ thuật viên giàu kinh nghiệm, tận tâm</li>
+      </ul>
+      <p>
+        Đây là lựa chọn lý tưởng cho những ai muốn tái tạo năng lượng, chăm sóc làn da và tận hưởng những giây phút thư giãn trọn vẹn.
+      </p>
+      <button class="btn-book">ĐẶT LỊCH NGAY</button>
+    </div>
+  </main>
+
+</body>
+</html>

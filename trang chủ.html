@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aurora Spa - Trang chủ</title>
+  <style>
+    /* ===================
+       RESET + THEME
+    =================== */
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+    html, body { height: 100%; background-color: #f6f7f6; color: #2e4d40; }
+
+    :root{
+      --green:#2e4d40;
+      --accent:#f5d979;
+      --cream:#f6f7f6;
+      --panel:#ffffff;
+    }
+
+    /* ===================
+       HEADER
+    =================== */
+    /* HEADER BẮT ĐẦU */
+    header {
+      width: 100%;
+      background-color: #f6f7f6;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      padding: 33px 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+    }
+    .logo img {
+      height: 80px;
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: #8a7a56;
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    nav a {
+      text-decoration: none;
+      font-size: 16px;
+      color: #2c3a2a;
+      font-weight: 500;
+      padding-bottom: 5px;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    nav a:hover { color: #395947; }
+    nav a.active { color: #395947; }
+
+    nav a.active::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #395947;
+    }
+
+    .header-right a {
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin-left: 10px;
+    }
+    .header-btn2 {background-color: #b69f67;
+        color: #fff;
+        border-radius: 20px;
+        padding: 8px 18px;
+        font-weight: 500; border: none;
+        transition: 0.2s ease;
+    }
+     .header-btn1 { background-color: #476a58;
+        color: #fff;
+        border-radius: 20px;
+        padding: 8px 18px;
+        font-weight: 500;  border: none;
+        transition: 0.2s ease; }
+    /* HEADER KẾT THÚC */
+
+    /* ===================
+       HERO
+    =================== */
+    .hero {
+      display: flex;
+      align-items: center; background-color: f6f7f6
+      justify-content: space-between;
+      padding: 60px 80px;
+      gap: 40px;
+    }
+    .hero-left {
+      flex: 1;
+      height: 500px;
+      background-color: #f6f7f6;
+      border-radius: 16px;
+      /* Thay ảnh lá tại đây */
+      background-image: url('https://img5.thuthuatphanmem.vn/uploads/2021/11/20/anh-spa-dep_104530213.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+    .hero-right {
+      flex: 1;
+      height: 500px;
+      background-color: #f6f7f6;
+      border-radius: 16px;
+      /* Thay ảnh người tại đây */
+      background-image: url('https://live.staticflickr.com/5294/29550408204_f6aa517a26_b.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* ===================
+       MODAL FORM (Đăng nhập/Đăng ký)
+    =================== */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .modal-content {
+      background: var(--panel);
+      border-radius: 10px;
+      padding: 30px 40px;
+      width: 400px;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+      color: var(--green);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .modal h2 {
+      color: var(--green);
+      margin-bottom: 20px;
+    }
+    .modal input[type="text"],
+    .modal input[type="email"],
+    .modal input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin: 8px 0;
+    }
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    .modal button {
+      background-color: var(--green);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+    .modal button:hover {
+      background-color: var(--accent);
+      color: var(--green);
+    }
+    .modal .link {
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--green);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER BẮT ĐẦU -->
+  <header>
+  <div class="logo">
+      <img src="data:image/jpeg;base64,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Mn1O7HcRz1TnDnyBSnOJK3K3cPZvRHx2ZkV402aBk9XsxxwCoFBxoxdfqgcUA81uLafzcqHJLmWHPNKRKDDWPlTGfL5zs5kgmBqsidwfTLo/DLaE5XjWZLsd+vKyh1R8PXGPHclkcLLqwPiIYKNCCC0yUDJSXKHWJlQzMSKIDTIVEERCoQ1wFiuMmsE64ChAdvlhyFjBFMrGS3csd0F9M/1cae8oEB2j2QhghmB3UbOdCHKXotmPv56YU6zMpXp6uy3Uc5WcPfOkqT6b5dgez+qV69ez3FzXfDVN32xL3zXbei1yc69osqhiSgPQ4cj7R71jv4WuTnIjTtVxfKfOJLcoJ90bBCMY0jxYSc6CMDGnauKL9Inw9m5ER7lj4joKjZOrdI0BIbR7ZZXzEnHD28puz3DW6+laNOrC2DiR3Tu7bbXyXzlO1Dh09s5v9Up09WOKSKBAdo6dt4ircG5am6b0cQmPSDVnHtHN2RiFa+vDLYM4gdSk+3FG4ZhRTVsSDKqXRqXD2Dn+arIuvjI4jkX1YNlM5BDP1TOAjAiXHu8HTvOAEdsRHb7tbmjup2dPl+EiM5NdM5NJE5PDwyabgzm2U4u8M9IKC+jM6RrMk88AYCNMczYOV1/37jap7vWi7IekGLOPi++NqLPqSXonVd3+BMSj4iKBjUjJ5aLXC48DOAjBiXnr3NtZTcKi0OsHdXkXbEZ55uedbnm355i1Oc+1nPs4QmU6xvDAuHHQbSyzeOS0BwrQ5AsfOLWK48DcIRkb3zgjAxp3fSM0j4tozhV1ThUxyajMlDYwdQnPMlGeYZOa2DwK/wDOmn+jaRmkf9l//8QAAv/aAAwDAQACAAMAAAAQ888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888884y61188888888888888888888888888888885S9XvZ3bwF3528888888888888888888888881+P8888NJ3+pR+8888888888888888888888u6R888888888tKa8888888888888888888888kWe88888888888r8888888888888888888882w+888888888888uU8888888888888888888v988888888888888oy8888888888888888885e888888888888888pW988888888888888888j388P78WRiqm+Bxhrt2V08888888888888888z38quYA8CMkQsF3t43m7V8888888888888888V62888888888888888r9h8888888888888888uUF888+NU7v02188888W/88888888888888888Wi888MfPv8AXf3PPPPPMPfPPPPPPPPPPPPPPPPLkPPPPPPPPPPPPPPPNPvPPPPPPPPPPPPPPPPPPDN/PPPPPPPPPPPP8tPPPPPPPPPPPPPPPPPPPPPvfPPPPPPPPPPPUX/PPPPPPPPPPPPPPPPPPPPPFcPPPPPPPPPOvP8A/wA888888888888888888888aWa4Q42888+mau888888888888888888888888dW1zRVz8/Te48888888888888888888888888888s8seNIm8c8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888//xAA7EQACAQMBBAgDBAkFAAAAAAABAgMABBEhEhMxUQUUMjNAQWFxICIwQkNSgRAjJGJwcoKRkhVQVLHB/9oACAECAQE/AP4Qkgcae+tkODJk+gzX+o2/ntD3FJe2r8JlpWVtVYH/AGB3WNSzHAFKsl787krF9lRxNP1e1TaKgf8AZrcy3gBlOxH+AUOj7QDuhT9GxcYnaNvQ1KvSlt96XXmBmoGuZh8t8mfNdnUUILw8bv8AstdWuf8Amt/iKNveL2bzP8y0Z7qDvogy+bJUciSqHRsg+JkHWp9393Hq3qad0iQsdFAqCNrl9/KNPsKfhktIJDtbOy34l0Nbu+h7uVZByfQ0Lm5XvLNvdTmuvRDtxyL7rSXltLoJV9jpUqGzlE8XdN3i+Q9aBDAEcD4e4l3UTMO0dFHrVvHuYgDx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">
+  </div>
+  <nav>
+    <a href="#" class="active">Trang chủ </a>
+    <a href="#">Dịch vụ</a>
+    <a href="#">Blog</a>
+    <a href="#">Lịch hẹn</a>
+    <a href="#" >FAQ</a>
+    <a href="#">Liên hệ</a>
+  </nav>
+    <div class="header-right">
+      <button class="header-btn1" onclick="openModal('loginModal')">Đăng nhập</button>
+      <button class="header-btn2" onclick="openModal('registerModal')">Đăng ký</button>
+    </div>
+  </header>
+  <!-- HEADER KẾT THÚC -->
+
+  <section class="hero">
+    <div class="hero-left"></div>
+    <div class="hero-right"></div>
+  </section>
+
+  <!-- MODALS -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <h2>Đăng nhập</h2>
+      <input type="email" placeholder="Email">
+      <input type="password" placeholder="Mật khẩu">
+      <div class="link" onclick="openModal('forgotModal')">Quên mật khẩu?</div>
+      <button>Đăng nhập</button>
+      <div class="link" onclick="switchModal('loginModal','registerModal')">Chưa có tài khoản? Đăng ký</div>
+    </div>
+  </div>
+
+  <div id="registerModal" class="modal">
+    <div class="modal-content">
+      <h2>Đăng ký</h2>
+      <input type="text" placeholder="Họ và tên">
+      <input type="email" placeholder="Email">
+      <input type="password" placeholder="Mật khẩu">
+      <input type="password" placeholder="Xác nhận mật khẩu">
+      <div class="checkbox">
+        <input type="checkbox" id="agree">
+        <label for="agree">Tôi đồng ý với điều khoản sử dụng</label>
+      </div>
+      <button onclick="checkAgree()">Đăng ký</button>
+      <div class="link" onclick="switchModal('registerModal','loginModal')">Đã có tài khoản? Đăng nhập</div>
+    </div>
+  </div>
+
+  <div id="forgotModal" class="modal">
+    <div class="modal-content">
+      <h2>Quên mật khẩu</h2>
+      <input type="email" placeholder="Nhập email của bạn">
+      <button>Gửi liên kết đặt lại mật khẩu</button>
+      <div class="link" onclick="switchModal('forgotModal','loginModal')">Quay lại đăng nhập</div>
+    </div>
+  </div>
+
+  <script>
+    function openModal(id) {
+      document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+      document.getElementById(id).style.display = 'flex';
+    }
+    function switchModal(hideId, showId) {
+      document.getElementById(hideId).style.display = 'none';
+      document.getElementById(showId).style.display = 'flex';
+    }
+    window.onclick = function(e) {
+      if (e.target.classList.contains('modal')) e.target.style.display = 'none';
+    }
+    function checkAgree() {
+      const cb = document.getElementById('agree');
+      if (!cb.checked) {
+        alert("Vui lòng đồng ý với điều khoản sử dụng!");
+        return;
+      }
+      alert("Đăng ký thành công!");
+      document.getElementById('registerModal').style.display = 'none';
+    }
+  </script>
+ <section style="padding: 80px 100px; background-color: #fffaf2;">
+  <h2 style="color:#2e4d40; font-size:32px; margin-bottom:24px; text-align:center;">Về Aurora Spa</h2>
+
+  <p style="max-width:1000px; margin:0 auto; line-height:1.8; font-size:17px; color:#2e4d40; text-align:center;">
+    Aurora Spa mang đến trải nghiệm chăm sóc sắc đẹp và thư giãn toàn diện dành cho mọi khách hàng.
+    Chúng tôi tự hào với không gian sang trọng, liệu trình chuyên sâu, và đội ngũ chuyên viên tận tâm –
+    giúp bạn lấy lại năng lượng, tái tạo làn da và cân bằng cuộc sống mỗi ngày.
+    Tại Aurora Spa, mỗi phút giây đều là hành trình chữa lành, để bạn cảm nhận sự bình yên và tự tin tỏa sáng từ bên trong.
+  </p>
+
+  <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:40px; margin-top:50px;">
+    <div style="flex:1; min-width:280px; max-width:320px; background:#f6f7f6; border-radius:12px; padding:30px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.05);">
+      <h3 style="color:#2e4d40; margin-bottom:10px;">🌿 Liệu trình tự nhiên</h3>
+      <p>Sử dụng nguyên liệu thiên nhiên cao cấp, an toàn tuyệt đối cho làn da nhạy cảm.</p>
+    </div>
+    <div style="flex:1; min-width:280px; max-width:320px; background:#f6f7f6; border-radius:12px; padding:30px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.05);">
+      <h3 style="color:#2e4d40; margin-bottom:10px;">💆‍♀️ Dịch vụ chuyên nghiệp</h3>
+      <p>Đội ngũ chuyên viên tận tâm, giàu kinh nghiệm mang đến liệu trình hiệu quả nhất.</p>
+    </div>
+    <div style="flex:1; min-width:280px; max-width:320px; background:#f6f7f6; border-radius:12px; padding:30px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.05);">
+      <h3 style="color:#2e4d40; margin-bottom:10px;">✨ Không gian sang trọng</h3>
+      <p>Thiết kế tinh tế, hương thơm nhẹ nhàng giúp bạn tận hưởng sự thư giãn trọn vẹn.</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

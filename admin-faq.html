@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Aurora Spa - Quản lý FAQ</title>
+<style>
+/* ===== RESET (đồng bộ Lịch hẹn) ===== */
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif}
+body{display:flex;min-height:100vh;background:#f6f7f6;color:#222}
+
+/* ===== SIDEBAR (đồng bộ Lịch hẹn) ===== */
+.sidebar{width:220px;background:#2e4d40;color:#fff;padding:20px 10px}
+.sidebar h2{font-size:20px;margin-bottom:30px;text-align:center}
+.sidebar ul{list-style:none}
+.sidebar li{display:flex;align-items:center;padding:10px 15px;margin:5px 0;border-radius:8px;cursor:pointer}
+.sidebar li:hover,.sidebar li.active{background:#4b705a}
+.sidebar li span{margin-left:10px}
+
+/* ===== MAIN ===== */
+.main{flex:1;padding:30px}
+
+/* ===== HEADER (đồng bộ Lịch hẹn) ===== */
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.header h1{font-size:36px;color:#2e4d40}
+.top-right{display:flex;align-items:center;gap:10px}
+.top-btn{background:#fff;border-radius:8px;padding:8px;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid #ccc}
+.top-btn:hover{background:#e0e0e0}
+.icon-btn{width:24px;height:24px;fill:#fff;stroke:#000;stroke-width:1}
+.dot{position:absolute;width:6px;height:6px;background:#ffc107;border-radius:50%;top:5px;right:5px}
+
+/* ===== TOOLBAR (cùng hàng: nút + 2 bộ lọc + search) ===== */
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;gap:12px;flex-wrap:wrap}
+.toolbar-left{display:flex;gap:10px;align-items:center}
+.add-btn,.pill-btn{background:#2e4d40;color:#fff;border:none;padding:10px 15px;border-radius:6px;cursor:pointer}
+.add-btn:hover,.pill-btn:hover{opacity:.95}
+.select,.search-input{padding:10px;border:1px solid #ccc;border-radius:6px;outline:none}
+.search-box{display:flex;align-items:center}
+.search-input{width:260px}
+
+/* ===== BULK BAR ===== */
+.bulk{display:none;align-items:center;gap:10px;margin-bottom:15px;padding:10px;border:1px dashed #ccc;border-radius:8px;background:#fafafa}
+.bulk.show{display:flex}
+.bulk .pill{padding:8px 12px;border-radius:6px;border:1px solid #ccc;background:#fff;cursor:pointer}
+.bulk .danger{background:#b53d3d;color:#fff;border:none}
+
+/* ===== CARD/TABLE (đồng bộ tone Lịch hẹn) ===== */
+.card{background:#fff;border-radius:10px;border:1px solid #ccc;overflow:hidden}
+.table-wrap{width:100%;overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:#fff;table-layout:fixed}
+th,td{padding:12px 15px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+th{background:#f1f1f1;font-weight:600}
+tbody tr:nth-child(even){background:#f9f9f9}
+.center{text-align:center}
+
+/* ===== ACTIONS ===== */
+.kebab .act{border:none;background:none;cursor:pointer;font-size:16px;margin:0 4px}
+.icon-small{width:18px;height:18px;vertical-align:middle}
+
+/* ===== PAGER ===== */
+.card-footer{display:flex;align-items:center;justify-content:center;gap:12px;padding:12px;border-top:1px solid #ccc;background:#fff}
+.pg{width:34px;height:34px;display:grid;place-items:center;border:1px solid #ccc;border-radius:8px;background:#fff;cursor:pointer}
+.pg:active{transform:scale(.98)}
+
+/* ===== VIEWS ===== */
+.view{display:none}
+.view.active{display:block}
+
+/* ===== FORM (đồng bộ phong cách Lịch hẹn) ===== */
+.form-wrap{background:#fff;border:1px solid #ccc;border-radius:10px;padding:24px}
+.form-title{font-size:24px;color:#2e4d40;text-align:center;margin-bottom:18px}
+.form-grid{display:grid;grid-template-columns:180px 1fr;gap:12px 16px}
+.form-grid .label{align-self:center;font-weight:600}
+.input,.textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:6px;background:#fff}
+.textarea{min-height:140px;resize:vertical}
+.editor-bar{grid-column:2/3;display:flex;gap:8px;margin:-2px 0 6px}
+.editor-btn{width:36px;height:36px;border:1px solid #ccc;border-radius:6px;background:#fff;display:grid;place-items:center;cursor:pointer}
+.switch{display:flex;align-items:center;gap:8px}
+.form-actions{display:flex;justify-content:center;gap:10px;margin-top:16px}
+.cancel-btn{background:#888;color:#fff;border:none;padding:10px 16px;border-radius:6px;cursor:pointer}
+.save-btn{background:#2e4d40;color:#fff;border:none;padding:10px 16px;border-radius:6px;cursor:pointer}
+
+/* ===== MODAL (đồng bộ Lịch hẹn) ===== */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);justify-content:center;align-items:center;z-index:999}
+.modal-content{background:#dbe7e3;padding:25px 30px;border-radius:10px;min-width:420px;text-align:center}
+.modal h2{margin-bottom:12px}
+.modal p{margin-bottom:16px}
+.modal .buttons{display:flex;justify-content:center;gap:12px}
+.modal .buttons button{padding:8px 18px;border:none;border-radius:6px;color:#fff;background:#2e4d40;cursor:pointer}
+.modal .buttons .cancel{background:#888}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .form-grid{grid-template-columns:1fr}
+  .search-input{width:100%}
+}
+</style>
+</head>
+<body>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>Aurora Spa</h2>
+    <ul>
+      <li><span>Khách hàng</span></li>
+      <li><span>Dịch vụ</span></li>
+      <li><span>Blog</span></li>
+      <li><span>Lịch hẹn</span></li>
+      <li class="active"><span>FAQ</span></li>
+      <li><span>Tích điểm</span></li>
+      <li><span>Cài đặt</span></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <!-- Header giống Lịch hẹn -->
+    <div class="header">
+      <h1 id="pageTitle">DANH SÁCH FAQ</h1>
+      <div class="top-right">
+        <button class="top-btn" title="Thông báo">
+          <svg class="icon-btn" viewBox="0 0 24 24">
+            <path d="M6 8a6 6 0 0 1 12 0v5l2 2H4l2-2V8"/>
+            <path d="M9 19a3 3 0 0 0 6 0"/>
+          </svg>
+          <span class="dot"></span>
+        </button>
+        <button class="top-btn" title="Tin nhắn">
+          <svg class="icon-btn" viewBox="0 0 24 24">
+            <path d="M21 15a4 4 0 0 1-4 4H8l-5 4V6a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+          </svg>
+        </button>
+        <button class="top-btn" title="Tài khoản">
+          <svg class="icon-btn" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M20 20a8 8 0 1 0-16 0"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- View: LIST -->
+    <section id="view-list" class="view active">
+      <!-- Toolbar: nút + 2 bộ lọc + ô tìm kiếm (cùng hàng) -->
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="add-btn" id="btnCreateTop">+ Tạo mới FAQ</button>
+
+          <!-- Bộ lọc Trạng thái hiển thị -->
+          <select id="statusFilter" class="select" title="Trạng thái hiển thị">
+            <option value="all">Tất cả</option>
+            <option value="visible">Đang hiển thị</option>
+            <option value="hidden">Đang ẩn</option>
+          </select>
+
+          <!-- Bộ lọc Chủ đề (tự sinh từ dữ liệu) -->
+          <select id="topicFilter" class="select" title="Chủ đề">
+            <option value="all">Tất cả chủ đề</option>
+          </select>
+        </div>
+
+        <!-- Ô tìm kiếm -->
+        <div class="search-box">
+          <input id="searchInput" class="search-input" type="search" placeholder="Tìm theo ID hoặc Chủ đề"/>
+        </div>
+      </div>
+
+      <!-- Bulk actions (giữ logic như faq admin) -->
+      <div id="bulkBar" class="bulk">
+        <div id="bulkCount">0 mục đã chọn</div>
+        <button class="pill" id="bulkShow">Đặt HIỂN THỊ</button>
+        <button class="pill" id="bulkHide">Đặt ẨN</button>
+        <button class="danger" id="bulkDelete">Xóa đã chọn</button>
+      </div>
+
+      <!-- Bảng FAQ -->
+      <div class="card">
+        <div class="table-wrap">
+          <table id="faqTable">
+            <colgroup>
+              <col style="width:56px"/>
+              <col style="width:110px"/>
+              <col/>
+              <col style="width:120px"/>
+              <col style="width:180px"/>
+              <col style="width:140px"/>
+            </colgroup>
+            <thead>
+              <tr>
+                <th class="center"><input id="selectAll" type="checkbox"/></th>
+                <th>ID</th>
+                <th>Chủ đề</th>
+                <th class="center">Hiển thị</th>
+                <th>Thời gian cập nhật</th>
+                <th class="center">Hành động</th>
+              </tr>
+            </thead>
+            <tbody id="faqTbody"></tbody>
+          </table>
+        </div>
+        <div class="card-footer">
+          <div class="pg" id="pgPrev">‹</div>
+          <div id="pgInfo">1</div>
+          <div class="pg" id="pgNext">›</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- View: FORM (tạo/sửa) -->
+    <section id="view-form" class="view">
+      <div class="form-wrap">
+        <div class="form-title" id="formHeading">TẠO MỚI FAQ</div>
+        <div class="form-grid">
+          <div class="label">Chủ đề</div>
+          <input id="fTopic" class="input" placeholder="Nhập tên chủ đề"/>
+
+          <div class="label">Câu hỏi</div>
+          <input id="fQuestion" class="input" placeholder="Nhập câu hỏi"/>
+
+          <div class="label">Câu trả lời</div>
+          <div>
+            <!-- editor mini (đậm/nghiêng/căn lề/danh sách/xóa định dạng) -->
+            <div class="editor-bar">
+              <button class="editor-btn" title="Đậm" onclick="wrapSel('**','**')">B</button>
+              <button class="editor-btn" title="Nghiêng" onclick="wrapSel('*','*')"><em>I</em></button>
+              <button class="editor-btn" title="Trái" onclick="alignText('left')">≡</button>
+              <button class="editor-btn" title="Giữa" onclick="alignText('center')">≣</button>
+              <button class="editor-btn" title="Phải" onclick="alignText('right')">≡</button>
+              <button class="editor-btn" title="Danh sách" onclick="insertBullets()">•</button>
+              <button class="editor-btn" title="Xóa định dạng" onclick="clearFormat()">⨯</button>
+            </div>
+            <textarea id="fAnswer" class="textarea" placeholder="Nhập câu trả lời"></textarea>
+          </div>
+
+          <div class="label">Hiển thị</div>
+          <div class="switch">
+            <input id="fVisible" type="checkbox"/>
+            <label for="fVisible">Bật / Tắt</label>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="cancel-btn" id="btnBack">Quay lại</button>
+          <button class="save-btn" id="btnSave">Lưu</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal XÓA -->
+  <div id="deleteModal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <h2>Xóa FAQ</h2>
+      <p>Bạn có chắc chắn muốn xóa mục này không?<br>Hành động này không thể hoàn tác.</p>
+      <div class="buttons">
+        <button id="btnConfirmDelete">Xóa</button>
+        <button class="cancel" id="btnCancelDelete">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ===== DEMO DATA (có thể thay bằng fetch API) ===== */
+const data = [
+  {id:'FAQ001', topic:'Thời gian hoạt động', question:'Spa mở cửa khi nào?', answer:'Spa mở cửa từ 9:00 đến 21:00 hằng ngày.', visible:true,  updated:'09:00:00 25/09/2025'},
+  {id:'FAQ002', topic:'Đặt lịch trước',     question:'Có cần đặt lịch trước không?', answer:'Nên đặt lịch để tránh quá tải và chờ đợi.', visible:true,  updated:'09:00:00 25/09/2025'},
+  {id:'FAQ003', topic:'Ưu đãi/Thành viên',  question:'Có chương trình thẻ thành viên?', answer:'Có tích điểm cho khách hàng thân thiết.',  visible:false, updated:'09:00:00 25/09/2025'},
+  {id:'FAQ004', topic:'Đổi lịch',           question:'Đổi lịch thế nào?', answer:'Gọi hotline hoặc đổi trên app/web.',          visible:true,  updated:'09:00:00 25/09/2025'},
+  {id:'FAQ005', topic:'Trễ hẹn',            question:'Nếu trễ hẹn thì sao?', answer:'Vui lòng đến sớm 10 phút hoặc liên hệ trước.', visible:true, updated:'09:00:00 25/09/2025'},
+  {id:'FAQ006', topic:'Sản phẩm riêng',     question:'Có thể dùng sản phẩm cá nhân?', answer:'Có, vui lòng thông báo trước.',           visible:true,  updated:'09:00:00 25/09/2025'},
+];
+
+/* ===== STATE ===== */
+let currentPage = 1; const pageSize = 5;
+let deletingId = null; let editingIndex = null;  // null => create
+let selected = new Set();
+
+/* ===== HELPERS ===== */
+const el = s => document.querySelector(s);
+const els = s => Array.from(document.querySelectorAll(s));
+const fmtNow = () => new Date().toLocaleTimeString('vi-VN',{hour12:false})+' '+new Date().toLocaleDateString('vi-VN');
+const autoId = () => {
+  const num = Math.max(0,...data.map(d=>+String(d.id).replace(/\D/g,''))) + 1;
+  return 'FAQ' + String(num).padStart(3,'0');
+};
+
+/* ===== FILTER OPTIONS (tự sinh chủ đề) ===== */
+function buildTopicFilter(){
+  const topics = Array.from(new Set(data.map(d=>d.topic))).sort((a,b)=>a.localeCompare(b,'vi'));
+  const sel = el('#topicFilter');
+  // giữ option "Tất cả chủ đề"
+  sel.innerHTML = '<option value="all">Tất cả chủ đề</option>' + topics.map(t=>`<option value="${t}">${t}</option>`).join('');
+}
+
+/* ===== RENDER LIST ===== */
+function applyFiltersAndSearch(list){
+  const sFilter = el('#statusFilter').value; // all | visible | hidden
+  const tFilter = el('#topicFilter').value;  // all | topic name
+  const q = el('#searchInput').value.toLowerCase().trim(); // search by id or topic
+
+  return list.filter(r=>{
+    const matchStatus = (sFilter==='all') || (sFilter==='visible' && r.visible) || (sFilter==='hidden' && !r.visible);
+    const matchTopic  = (tFilter==='all') || (r.topic===tFilter);
+    const matchSearch = !q || r.id.toLowerCase().includes(q) || r.topic.toLowerCase().includes(q);
+    return matchStatus && matchTopic && matchSearch;
+  });
+}
+
+function renderList(){
+  const filtered = applyFiltersAndSearch(data);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  currentPage = Math.min(currentPage, totalPages);
+  const start = (currentPage-1)*pageSize;
+  const rows = filtered.slice(start, start+pageSize);
+
+  const tbody = el('#faqTbody');
+  tbody.innerHTML = rows.map(r => `
+    <tr data-id="${r.id}">
+      <td class="center"><input class="rowSel" type="checkbox" ${selected.has(r.id)?'checked':''}></td>
+      <td>${r.id}</td>
+      <td title="${r.topic}">${r.topic}</td>
+      <td class="center"><input class="vis-toggle" type="checkbox" title="Bật/Tắt hiển thị" ${r.visible?'checked':''}></td>
+      <td>${r.updated}</td>
+      <td class="center kebab">
+        <button class="act" data-act="edit" title="Chỉnh sửa">✏️</button>
+        <button class="act" data-act="delete" title="Xóa">🗑️</button>
+      </td>
+    </tr>
+  `).join('');
+
+  el('#pgInfo').textContent = currentPage;
+
+  // Click dòng để mở form (trừ khi click vào input/button)
+  els('#faqTbody tr').forEach(tr => tr.addEventListener('click', (e)=>{
+    if(e.target.closest('button') || e.target.closest('input')) return;
+    const id = tr.getAttribute('data-id');
+    const idx = data.findIndex(x=>x.id===id);
+    openForm(idx);
+  }));
+
+  // Checkbox từng dòng
+  els('.rowSel').forEach(cb=>{
+    cb.addEventListener('click', e=>e.stopPropagation());
+    cb.addEventListener('change', e=>{
+      const id = e.target.closest('tr').getAttribute('data-id');
+      if(e.target.checked) selected.add(id); else selected.delete(id);
+      updateBulkBar();
+    });
+  });
+
+  // Toggle hiển thị
+  els('.vis-toggle').forEach(cb=>{
+    cb.addEventListener('click', e=>e.stopPropagation());
+    cb.addEventListener('change', e=>{
+      const id = e.target.closest('tr').getAttribute('data-id');
+      const rec = data.find(x=>x.id===id);
+      if(rec){ rec.visible = e.target.checked; rec.updated = fmtNow(); }
+      renderList();
+    });
+  });
+
+  // Action buttons
+  els('.kebab [data-act="edit"]').forEach(btn=>btn.onclick=(ev)=>{
+    ev.stopPropagation();
+    const id = btn.closest('tr').getAttribute('data-id');
+    const idx = data.findIndex(x=>x.id===id);
+    openForm(idx);
+  });
+  els('.kebab [data-act="delete"]').forEach(btn=>btn.onclick=(ev)=>{
+    ev.stopPropagation();
+    deletingId = btn.closest('tr').getAttribute('data-id');
+    openDelete();
+  });
+
+  // Select All trên trang hiện tại
+  const all = el('#selectAll');
+  all.checked = rows.length>0 && rows.every(r=>selected.has(r.id));
+  all.indeterminate = !all.checked && rows.some(r=>selected.has(r.id));
+  all.onclick = (e)=>{
+    e.stopPropagation();
+    if(all.checked){ rows.forEach(r=>selected.add(r.id)); }
+    else{ rows.forEach(r=>selected.delete(r.id)); }
+    renderList(); updateBulkBar();
+  };
+
+  updateBulkBar();
+}
+
+function updateBulkBar(){
+  const count = selected.size;
+  el('#bulkCount').textContent = count + ' mục đã chọn';
+  el('#bulkBar').classList.toggle('show', count>0);
+}
+
+/* ===== VIEW SWITCH ===== */
+function show(view){
+  els('.view').forEach(v=>v.classList.remove('active'));
+  el(view).classList.add('active');
+  el('#pageTitle').textContent = (view==='#view-list') ? 'DANH SÁCH FAQ' : (editingIndex==null ? 'TẠO MỚI FAQ' : 'CHỈNH SỬA FAQ');
+}
+
+/* ===== FORM HELPERS ===== */
+function clearForm(){
+  el('#fTopic').value='';
+  el('#fQuestion').value='';
+  el('#fAnswer').value='';
+  el('#fVisible').checked=false;
+  el('#formHeading').textContent='TẠO MỚI FAQ';
+  editingIndex=null;
+}
+
+function openForm(idx){
+  if(idx==null){ clearForm(); }
+  else{
+    editingIndex = idx;
+    const r = data[idx];
+    el('#formHeading').textContent='CHỈNH SỬA FAQ';
+    el('#fTopic').value=r.topic;
+    el('#fQuestion').value=r.question;
+    el('#fAnswer').value=r.answer;
+    el('#fVisible').checked=!!r.visible;
+  }
+  show('#view-form');
+}
+
+function saveForm(){
+  const rec = {
+    id: editingIndex==null ? autoId() : data[editingIndex].id,
+    topic: el('#fTopic').value.trim(),
+    question: el('#fQuestion').value.trim(),
+    answer: el('#fAnswer').value.trim(),
+    visible: el('#fVisible').checked,
+    updated: fmtNow()
+  };
+  if(!rec.topic || !rec.question){
+    alert('Vui lòng nhập đầy đủ Chủ đề và Câu hỏi');
+    return;
+  }
+  if(editingIndex==null){
+    // Thêm mới lên đầu và về trang 1
+    data.unshift(rec);
+    currentPage = 1;
+  }else{
+    data[editingIndex] = rec;
+  }
+  selected.clear();
+  buildTopicFilter();   // cập nhật danh sách chủ đề sau khi thêm/sửa
+  renderList();
+  show('#view-list');
+}
+
+/* ===== DELETE MODAL ===== */
+function openDelete(){ el('#deleteModal').style.display='flex'; }
+function closeDelete(){ el('#deleteModal').style.display='none'; deletingId=null; }
+
+/* ===== MINI EDITOR ===== */
+function wrapSel(pre,post){
+  const ta=el('#fAnswer'); const s=ta.selectionStart,e=ta.selectionEnd;
+  const v=ta.value; ta.value=v.slice(0,s)+pre+v.slice(s,e)+post+v.slice(e);
+  ta.focus(); ta.selectionStart=s+pre.length; ta.selectionEnd=e+pre.length;
+}
+function alignText(dir){ el('#fAnswer').style.textAlign=dir; }
+function insertBullets(){
+  const ta=el('#fAnswer');
+  const lines=ta.value.split('\n').map(l=> l? '• '+l : l);
+  ta.value=lines.join('\n');
+}
+function clearFormat(){ el('#fAnswer').style.textAlign='left'; }
+
+/* ===== BULK ACTIONS ===== */
+el('#bulkShow').onclick=()=>{ selected.forEach(id=>{ const r=data.find(x=>x.id===id); if(r){ r.visible=true; r.updated=fmtNow(); }}); renderList(); };
+el('#bulkHide').onclick=()=>{ selected.forEach(id=>{ const r=data.find(x=>x.id===id); if(r){ r.visible=false; r.updated=fmtNow(); }}); renderList(); };
+el('#bulkDelete').onclick=()=>{
+  for(const id of Array.from(selected)){
+    const i=data.findIndex(x=>x.id===id);
+    if(i>-1) data.splice(i,1);
+    selected.delete(id);
+  }
+  buildTopicFilter();   // cập nhật danh sách chủ đề sau khi xóa
+  renderList(); updateBulkBar();
+};
+
+/* ===== EVENTS ===== */
+el('#btnCreateTop').onclick=()=>openForm(null);
+el('#btnBack').onclick = ()=> show('#view-list');
+el('#btnSave').onclick = saveForm;
+
+el('#searchInput').oninput = ()=>{ currentPage=1; renderList(); };
+el('#statusFilter').onchange = ()=>{ currentPage=1; renderList(); };
+el('#topicFilter').onchange  = ()=>{ currentPage=1; renderList(); };
+
+el('#pgPrev').onclick = ()=>{ if(currentPage>1){ currentPage--; renderList(); } };
+el('#pgNext').onclick = ()=>{ currentPage++; renderList(); };
+
+el('#btnCancelDelete').onclick = closeDelete;
+el('#btnConfirmDelete').onclick = ()=>{
+  if(deletingId){
+    const i = data.findIndex(r=>r.id===deletingId);
+    if(i>-1) data.splice(i,1);
+    renderList();
+    buildTopicFilter();
+  }
+  closeDelete();
+};
+
+/* ===== INIT ===== */
+buildTopicFilter();
+renderList();
+</script>
+</body>
+</html>
